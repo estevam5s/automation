@@ -207,6 +207,8 @@ def main() -> any:
                             "Atualizar Lucro",
                             "Deletar Lucro",
                             "Inserir",
+                            "Atualizar",
+                            "Deletar",
                             "Estatísticas de vendas",
                             "Relatórios financeiros",
                             "Análise de tendências",
