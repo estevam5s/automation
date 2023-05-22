@@ -25,7 +25,7 @@ from frontend.src.pages.gráficos.bolha.bubble import generate_chart
 from frontend.src.pages.pedidosSemana import analise_pedidos_semana
 from frontend.src.pages.marmitaMaisVendidas import __main__Marmitas__
 from frontend.src.pages.historico_vendas import gerar_historico_vendas
-from frontend.src.pages.gerenciamento_estoque import gerenciamento_estoque
+from frontend.src.pages.gerenciamento_estoque import gerenciamento_estoque, show_data
 from frontend.src.pages.estatisticaVendas import calcular_estatisticas_vendas
 from frontend.src.pages.relatorioFinanceiro import gerar_relatorios_financeiros
 
@@ -165,9 +165,7 @@ def main() -> any:
                 __main__Marmitas__(csv_file)
 
             if selecionar == "📈 Gerenciamento de estoque":
-                lucro = 'app/data/lucro.csv'
-                # Chamar a função
-                gerenciamento_estoque(lucro)
+                show_data()
 
             if selecionar == "📋 Análise de Rentabilidade":
                 lucro = 'app/data/lucro.csv'

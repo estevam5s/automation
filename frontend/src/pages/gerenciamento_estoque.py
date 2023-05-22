@@ -1,9 +1,21 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from deta import Deta
 
-def gerenciamento_estoque(file):
-    # Carregar dados do arquivo CSV
-    df = pd.read_csv(file)
+DETA_KEY = "e0u31gqkqju_2Ps7fJD5a1kAKF2Rr4Y31ASSdvUUeX8Y"
+
+# Initialize Deta
+deta = Deta(DETA_KEY)
+
+lucro_db = deta.Base("lucro")
+
+
+def gerenciamento_estoque():
+    # Consultar dados do banco lucro
+    registros = lucro_db.fetch().items
+    df = pd.DataFrame(registros)
 
     # Estoque total por item
     estoque_total = df.groupby('ITEM')['LUCRO'].sum()
@@ -32,3 +44,26 @@ def gerenciamento_estoque(file):
     # Exibir estoque máximo por item
     st.subheader('Estoque Máximo por Item')
     st.write(estoque_maximo)
+
+
+def show_data():
+    # Configura a cor de fundo para verde
+    st.markdown(
+        """
+        <style>
+        body {
+            background-color: #00FF00;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Insights Criativos
+    st.title("Gerenciamento de Estoque")
+
+    st.markdown("Bem-vindo ao nosso sistema de gerenciamento de estoque!")
+    st.markdown("Aqui você pode analisar os dados de lucro para realizar o gerenciamento de estoque de forma eficiente.")
+
+    # Executa a função de gerenciamento de estoque
+    gerenciamento_estoque()

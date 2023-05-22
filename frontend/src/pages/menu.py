@@ -4,7 +4,7 @@ import streamlit as st
 def __menu__():
     # Adiciona um sidebar
     st.sidebar.title("Opções de Consulta")
-    selecionar = st.sidebar.selectbox("Selecione a página", [
+    st.sidebar.selectbox("Selecione a página", [
         "🏠 Home",
         "consult",
         "consult Analysis",
@@ -33,5 +33,3 @@ def __menu__():
         "🚫 Sair"
         ]
     )
-
-    return selecionar
