@@ -22,7 +22,7 @@ from frontend.src.pages.CRUD.consult.consultar import __consult__
 from frontend.src.pages.CRUD.update.atualizar import __atualizar__
 from frontend.src.pages.gráficos.bolha.bubble import generate_chart
 from frontend.src.pages.pedidosSemana import analise_pedidos_semana
-from frontend.src.pages.marmitaMaisVendidas import __main__Marmitas__
+from frontend.src.pages.marmitaMaisVendidas import show_data_table
 from frontend.src.pages.analise_de_rentabilidade import show_analysis
 from frontend.src.pages.historico_vendas import gerar_historico_vendas
 from frontend.src.pages.estatisticaVendas import calcular_estatisticas_vendas
@@ -177,17 +177,16 @@ def main() -> any:
             if selecionar == "📉 Estatísticas de vendas":
                 calcular_estatisticas_vendas()
 
-            # -----------------------------------------------------------------
-
             if selecionar == "🎃 Tipo de marmita mais vendido":
-                csv_file = 'app/data/pedidos.csv'
-                __main__Marmitas__(csv_file)
+                show_data_table()
+                
+            # -----------------------------------------------------------------
 
             if selecionar == "📐 Relatórios financeiros":
                 csv_file = 'app/data/lucro.csv'
                 if csv_file is not None:
-                    
                     gerar_relatorios_financeiros(csv_file)
+
             if selecionar == "🪀 Tipo de marita que saiu":
                 csv_file = 'app/data/pedidos.csv'
                 st.title("Análise de Marmitas")

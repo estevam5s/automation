@@ -1,20 +1,27 @@
+from deta import Deta
+import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import streamlit as st
+
+DETA_KEY = "e0u31gqkqju_2Ps7fJD5a1kAKF2Rr4Y31ASSdvUUeX8Y"
+
+# Initialize Deta
+deta = Deta(DETA_KEY)
+
+pedidos_db = deta.Base("pedidos")
 
 class MarmitaService:
-    def __init__(self, csv_file):
-        self.csv_file = csv_file
+    def __init__(self, db):
+        self.db = db
     
     def carregar_dados(self):
-        try:
-            return pd.read_csv(self.csv_file)
-        except FileNotFoundError:
-            st.error("Arquivo CSV não encontrado.")
+        registros = self.db.fetch().items
+        df = pd.DataFrame(registros)
+        return df
     
     def listar_tipos_marmita(self, df):
         if 'ITEM' not in df.columns:
-            st.error("A coluna 'ITEM' não foi encontrada no arquivo CSV.")
+            st.error("A coluna 'ITEM' não foi encontrada nos dados.")
             return
         
         tipos_marmita = df['ITEM'].str.split(' ').str[1].unique()
@@ -22,48 +29,47 @@ class MarmitaService:
     
     def obter_tipo_marmita_mais_vendido(self, df):
         if 'ITEM' not in df.columns:
-            st.error("A coluna 'ITEM' não foi encontrada no arquivo CSV.")
+            st.error("A coluna 'ITEM' não foi encontrada nos dados.")
             return
         
         tipo_mais_vendido = df['ITEM'].str.split(' ').str[1].value_counts().idxmax()
         return tipo_mais_vendido
 
-def __main__Marmitas__(csv_file_methodo=None):
+def show_data_table():
     st.set_option('deprecation.showPyplotGlobalUse', False)  # Desabilitar aviso de depreciação
     st.title("Análise de Marmitas")
     st.sidebar.title("Informações Úteis")
     
-    # Selecionar arquivo CSV
-    csv_file = csv_file_methodo
+    # Cria o serviço de marmitas
+    marmita_service = MarmitaService(pedidos_db)
 
-    if csv_file is not None:
-        marmita_service = MarmitaService(csv_file)
-        df = marmita_service.carregar_dados()
+    # Carrega os dados dos pedidos
+    df = marmita_service.carregar_dados()
+
+    # Exibir informações úteis no sidebar
+    st.sidebar.subheader("Resumo dos Dados")
+    st.sidebar.text(f"Número de Registros: {len(df)}")
+    st.sidebar.text(f"Número de Colunas: {df.shape[1]}")
+    
+    # Listar tipos de marmita
+    tipos_marmita = marmita_service.listar_tipos_marmita(df)
+    
+    if tipos_marmita is not None:
+        st.subheader("Tipos de Marmita")
+        for tipo in tipos_marmita:
+            st.text(tipo)
         
-        # Exibir informações úteis no sidebar
-        st.sidebar.subheader("Resumo do Arquivo")
-        st.sidebar.text(f"Número de Linhas: {df.shape[0]}")
-        st.sidebar.text(f"Número de Colunas: {df.shape[1]}")
+        # Exibir tipo de marmita mais vendido
+        tipo_mais_vendido = marmita_service.obter_tipo_marmita_mais_vendido(df)
+        st.subheader("Tipo de Marmita Mais Vendido")
+        st.text(tipo_mais_vendido)
         
-        # Listar tipos de marmita
-        tipos_marmita = marmita_service.listar_tipos_marmita(df)
-        
-        if tipos_marmita is not None:
-            st.subheader("Tipos de Marmita")
-            for tipo in tipos_marmita:
-                st.text(tipo)
-            
-            # Exibir tipo de marmita mais vendido
-            tipo_mais_vendido = marmita_service.obter_tipo_marmita_mais_vendido(df)
-            st.subheader("Tipo de Marmita Mais Vendido")
-            st.text(tipo_mais_vendido)
-            
-            # Gerar gráfico de contagem de marmitas por tipo
-            counts = df['ITEM'].str.split(' ').str[1].value_counts()
-            fig, ax = plt.subplots()
-            ax.bar(counts.index, counts.values)
-            ax.set_xlabel('Tipo de Marmita')
-            ax.set_ylabel('Quantidade')
-            ax.set_title('Tipos de Marmita Vendidos')
-            ax.set_xticklabels(counts.index, rotation=45)
-            st.pyplot(fig)
+        # Gerar gráfico de contagem de marmitas por tipo
+        counts = df['ITEM'].str.split(' ').str[1].value_counts()
+        fig, ax = plt.subplots()
+        ax.bar(counts.index, counts.values)
+        ax.set_xlabel('Tipo de Marmita')
+        ax.set_ylabel('Quantidade')
+        ax.set_title('Tipos de Marmita Vendidos')
+        ax.set_xticklabels(counts.index, rotation=45)
+        st.pyplot(fig)
