@@ -192,17 +192,15 @@ def main() -> any:
             if selecionar == "🔏 Inserir":
                 __insert__()
 
+            if selecionar == "🧨 Deletar":
+                __delete__()
+
             # -----------------------------------------------------------------
 
             if selecionar == "🖨️ Atualizar":
                 pedido = 'app/data/pedidos.csv'
                 lucro = 'app/data/lucro.csv'
                 __atualizar__(lucro, pedido)
-
-            if selecionar == "🧨 Deletar":
-                lucro = 'app/data/lucro.csv'
-                pedido = 'app/data/pedidos.csv'
-                __delete__(lucro, pedido)
 
             # -----------------------------------------------------------------
 

@@ -4,29 +4,100 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# Função para exibir a tabela de lucros
-def exibir_tabela_lucros(df):
-    st.subheader('Tabela de Lucros')
+from deta import Deta
+import streamlit as st
+import pandas as pd
+
+DETA_KEY = "e0zg3sgc85x_rLjU5Zy93MAHEY8UaoCnMGDJSNZiiHNR"
+
+# Initialize Deta
+deta = Deta(DETA_KEY)
+
+pedidos_db = deta.Base("pedidos")
+
+# Função para exibir a tabela de pedidos
+def exibir_tabela_pedidos(df):
+    st.subheader('Tabela de Pedidos')
     st.dataframe(df)
 
 # Função principal
-def deletePedidos(file):
-    csv_file = file
-    df = pd.read_csv(csv_file)
+def deletePedidos():
+    # Consultar todos os registros no banco de dados
+    registros = pedidos_db.fetch().items
 
-    # Exibição inicial da tabela de lucros
-    exibir_tabela_lucros(df)
+    # Criar listas vazias para cada coluna
+    ids = []
+    datas = []
+    itens = []
+    anotacoes = []
 
-    st.sidebar.subheader('Excluir Lucro')
-    lucro_id = st.sidebar.selectbox('ID do Lucro', df['ID'].tolist())
+    # Extrair os dados de cada registro e armazenar nas listas correspondentes
+    for registro in registros:
+        ids.append(registro["ID"])
+        datas.append(registro["DATA"])
+        itens.append(registro["ITEM"])
+        anotacoes.append(registro["ANOTAÇÕES"])
+
+    # Criar um DataFrame com os dados
+    data = {
+        "ID": ids,
+        "DATA": datas,
+        "ITEM": itens,
+        "ANOTAÇÕES": anotacoes
+    }
+    df = pd.DataFrame(data)
+
+    # Exibição inicial da tabela de pedidos
+    exibir_tabela_pedidos(df)
+
+    st.sidebar.subheader('Excluir Pedido')
+    pedido_id = st.sidebar.selectbox('ID do Pedido', df['ID'].tolist())
 
     if st.sidebar.button('Excluir'):
-        df = df[df['ID'] != lucro_id]
-        df.reset_index(drop=True, inplace=True)
-        df.to_csv(csv_file, index=False)
-        exibir_tabela_lucros(df)
-        st.sidebar.success(f'Lucro ID {lucro_id} excluído com sucesso!')
+        # Remover o registro correspondente ao ID selecionado
+        pedidos_db.delete(pedido_id)
 
+        # Atualizar a tabela de pedidos
+        registros = pedidos_db.fetch().items
+        ids = []
+        datas = []
+        itens = []
+        anotacoes = []
+
+        # Extrair os dados atualizados de cada registro e armazenar nas listas correspondentes
+        for registro in registros:
+            ids.append(registro["ID"])
+            datas.append(registro["DATA"])
+            itens.append(registro["ITEM"])
+            anotacoes.append(registro["ANOTAÇÕES"])
+
+        # Criar um DataFrame com os dados atualizados
+        data = {
+            "ID": ids,
+            "DATA": datas,
+            "ITEM": itens,
+            "ANOTAÇÕES": anotacoes
+        }
+        df = pd.DataFrame(data)
+
+        exibir_tabela_pedidos(df)
+        st.sidebar.success(f'Pedido ID {pedido_id} excluído com sucesso!')
+
+
+
+
+from deta import Deta
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+DETA_KEY = "e0u31gqkqju_2Ps7fJD5a1kAKF2Rr4Y31ASSdvUUeX8Y"
+
+# Initialize Deta
+deta = Deta(DETA_KEY)
+
+lucro_db = deta.Base("lucro")
 
 # Interface para consulta de lucros
 class LucroConsultaInterface:
@@ -63,30 +134,40 @@ class LucroService:
         self.lucro_query.excluir_lucro(lucro_id)
 
 # Query para buscar, salvar e excluir os lucros
-class CsvLucroQuery:
-    def __init__(self, csv_file):
-        self.csv_file = csv_file
+class DetaLucroQuery:
+    def __init__(self, deta, base_name):
+        self.base = deta.Base(base_name)
 
     def obter_lucros(self):
-        df = pd.read_csv(self.csv_file)
-        lucros = df['LUCRO'].tolist()
+        lucros = []
+        response = self.base.fetch()
+        for item in response.items:
+            lucros.append(item["LUCRO"])
         return lucros
 
     def salvar_lucro(self, lucro_id, novo_lucro):
-        df = pd.read_csv(self.csv_file)
-        df.loc[lucro_id - 1, 'LUCRO'] = novo_lucro
-        df.to_csv(self.csv_file, index=False)
+        lucros = self.base.fetch()
+        if 0 < lucro_id <= len(lucros):
+            lucro = lucros[lucro_id - 1]
+            lucro["LUCRO"] = novo_lucro
+            self.base.put(lucro)
+        else:
+            raise ValueError("ID de lucro inválido.")
 
     def excluir_lucro(self, lucro_id):
-        df = pd.read_csv(self.csv_file)
-        df.drop(lucro_id - 1, inplace=True)
-        df.reset_index(drop=True, inplace=True)
-        df.to_csv(self.csv_file, index=False)
+        lucros = self.base.fetch()
+        if 0 < lucro_id <= len(lucros):
+            lucro = lucros[lucro_id - 1]
+            self.base.delete(lucro["key"])
+        else:
+            raise ValueError("ID de lucro inválido.")
 
 # Função principal
-def deleteLucro(file):
-    csv_file = file
-    lucro_query = CsvLucroQuery(csv_file)
+def deleteLucro():
+    # Initialize Deta
+    deta = Deta(DETA_KEY)
+
+    lucro_query = DetaLucroQuery(deta, "lucro")
     lucro_service = LucroService(lucro_query)
     lucros = lucro_service.obter_lucros()
 
@@ -109,12 +190,16 @@ def deleteLucro(file):
         st.sidebar.success(f'Lucro ID {lucro_id} excluído com sucesso!')
 
 
-def __delete__(lucro, pedido):
+
+
+
+
+def __delete__():
     st.title("Deletar Dados")
     opcoes = ["Estabelecimento", "Lucro do Estabelecimento"]
     escolha = st.radio("Selecione o tipo de dado a ser deletado:", opcoes)
 
     if escolha == "Estabelecimento":
-        deletePedidos(pedido)
+        deletePedidos()
     elif escolha == "Lucro do Estabelecimento":
-        deleteLucro(lucro)
+        deleteLucro()
