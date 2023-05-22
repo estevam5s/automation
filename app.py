@@ -275,9 +275,6 @@ def main() -> any:
         # Display login message if the user is not authenticated
         st.info("Please log in to access the system.")
 
-    
-            
-
 
 if __name__ == "__main__":
     main()

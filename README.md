@@ -133,6 +133,32 @@ The first time the project is used, the following commands should be run:
    `docker stop CONTAINER_ID`
 
 
+## Deploying to Heroku
+
+First, [install heroku and login](https://devcenter.heroku.com/articles/getting-started-with-python#set-up). 
+To create a new deployment, run inside `traingenerator`:
+
+```
+heroku create
+git push heroku main
+heroku open
+```
+
+To update the deployed app, commit your changes and run:
+
+```
+git push heroku main
+```
+
+*Optional: If you set up a Github repo to enable the "Open in Colab" button (see above),
+you also need to run:*
+
+```
+heroku config:set GITHUB_TOKEN=<your-github-access-token>
+heroku config:set REPO_NAME=<user/notebooks-repo>
+```
+
+
 ## Built With
 
 - [Numpy](https://numpy.org/) - Fundamental package for scientific computing with Python,
