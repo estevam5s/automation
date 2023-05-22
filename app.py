@@ -68,11 +68,8 @@ def main() -> any:
             st.sidebar.title("Opções de Consulta")
             selecionar = st.sidebar.selectbox("Selecione a página", [
                             "🏠 Home",
-                            "insert",
                             "consult",
-                            "insert Analysis",
                             "consult Analysis",
-                            "Insert Dados importantes",
                             "Consult Dados importantes",
                             "📊 Gráfico",
                             "💼 Consultar",
