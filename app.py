@@ -10,17 +10,20 @@
 
 from PIL import Image
 import streamlit as st
+from frontend.src.pages.historico_vendas import gerar_historico_vendas
 from frontend.src.pages.home import homePage
 from frontend.src.pages.developer import developers
 from frontend.src.pages.marmitas import listar_tipos_marmita
+from frontend.src.pages.estatisticaVendas import calcular_estatisticas_vendas
 from frontend.src.pages.CRUD.delete.deletar import __delete__
 from frontend.src.pages.CRUD.insert.inserir import __insert__
+from frontend.src.pages.analise_de_rentabilidade import analise
 from frontend.src.pages.CRUD.consult.consultar import __consult__
 from frontend.src.pages.CRUD.update.atualizar import __atualizar__
-from frontend.src.pages.analise_de_rentabilidade import analise
 from frontend.src.pages.gráficos.bolha.bubble import generate_chart
 from frontend.src.pages.pedidosSemana import analise_pedidos_semana
 from frontend.src.pages.marmitaMaisVendidas import __main__Marmitas__
+from frontend.src.pages.relatorioFinanceiro import gerar_relatorios_financeiros
 
 
 def autenticar_usuario(senha):
@@ -248,6 +251,23 @@ def main() -> any:
             if selecionar == "🎃 Tipo de marmita mais vendido":
                 csv_file = 'app/data/pedidos.csv'
                 __main__Marmitas__(csv_file)
+
+            if selecionar == "📆 Histórico de vendas":
+                lucro = 'app/data/lucro.csv'
+                # Chamar a função
+                gerar_historico_vendas(lucro)
+
+            if selecionar == "📉 Estatísticas de vendas":
+                lucro = 'app/data/lucro.csv'
+                # Chamar a função
+                calcular_estatisticas_vendas(lucro)
+
+            if selecionar == "📐 Relatórios financeiros":
+                csv_file = 'app/data/lucro.csv'
+                # Check if a file is uploaded
+                if csv_file is not None:
+                    # Perform analysis and display the results
+                    gerar_relatorios_financeiros(csv_file)
 
             if selecionar == "💼 Consultar":
                 __consult__()
