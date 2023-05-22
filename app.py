@@ -197,8 +197,8 @@ def main() -> any:
             st.sidebar.title("Opções de Consulta")
             selecionar = st.sidebar.selectbox("Selecione a página", [
                             "🏠 Home",
-                            "Consultar Dados",
-                            "Gráfico",
+                            "🎯 Consultar Dados",
+                            "📊 Gráfico",
                             "Estatísticas de vendas",
                             "Relatórios financeiros",
                             "Análise de tendências",
@@ -229,22 +229,25 @@ def main() -> any:
             # Executa a função correspondente com base na opção selecionada
             if selecionar == "🏠 Home":
                 homePage()
-            if selecionar == "Consultar Dados":
+
+            if selecionar == "🎯 Consultar Dados":
                 show_data_table()
-            if selecionar == "Gráfico":
+
+            if selecionar == "📊 Gráfico":
                 csv_file = 'app/data/pedidos.csv'  # Caminho relativo para o arquivo .csv
                 # Exemplo de uso
                 chart_type = st.selectbox('Escolha o tipo de gráfico', ['bolha', 'barra', 'linha', 'pizza', 'histograma', 'dispersao', 'matriz', 'funil', 'radar', 'area', 'torta', 'dendrograma', 'correlacao', 'waffle', 'calendario', 'radial'])
                 generate_chart(csv_file, chart_type)
 
-
             if selecionar == "Pedidos por Semana":
                 csv_file = 'app/data/pedidos.csv'
                 # Perform analysis on the weekly orders
                 analise_pedidos_semana(csv_file)
+
             if selecionar == "Tipo de marmita mais vendido":
                 csv_file = 'app/data/pedidos.csv'
                 __main__Marmitas__(csv_file)
+
             if selecionar == "Tipo de marita que saiu":
                 csv_file = 'app/data/pedidos.csv'
                 st.title("Análise de Marmitas")
@@ -255,10 +258,13 @@ def main() -> any:
                 if csv_file is not None:
                     # Chamar função para listar tipos de marmita e gerar gráfico
                     listar_tipos_marmita(csv_file)
+
             if selecionar == "Developers":
                 developers()
+
             if selecionar == "Sair":
                 logout()
+
             if selecionar == "Análise de Rentabilidade":
                 csv_file = 'app/data/pedidos.csv'
                 # Check if a file is uploaded
