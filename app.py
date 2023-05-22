@@ -133,7 +133,7 @@ def main() -> any:
                 insert_data_lucro()
                 insert_data_pedidos()
 
-            if selecionar == "consult":# Consultar senha do banco de dados
+            if selecionar == "consult":
                 result = db.get("user")
 
                 if result:
@@ -145,24 +145,13 @@ def main() -> any:
                     st.write("Não foi possível encontrar a senha do usuário.")
 
             if selecionar == "📊 Gráfico":
-                # Insights Criativos
                 st.title("Análise de Dados de Pedidos - Gráficos")
 
                 st.markdown("Bem-vindo à nossa ferramenta de análise de dados de pedidos!")
                 st.markdown("Aqui você pode explorar e obter insights valiosos sobre os dados de pedidos da sua empresa.")
 
                 chart_type = st.selectbox('Escolha o tipo de gráfico', ['bolha', 'barra', 'linha', 'pizza', 'histograma', 'dispersao', 'matriz', 'funil', 'radar', 'area', 'torta', 'dendrograma', 'correlacao', 'waffle', 'calendario', 'radial'])
-                # Gerar o gráfico com base no tipo selecionado
                 generate_chart(pedidos_db, chart_type)
-
-            if selecionar == "🔮 Pedidos por Semana":
-                csv_file = 'app/data/pedidos.csv'
-                # Perform analysis on the weekly orders
-                analise_pedidos_semana(csv_file)
-
-            if selecionar == "🎃 Tipo de marmita mais vendido":
-                csv_file = 'app/data/pedidos.csv'
-                __main__Marmitas__(csv_file)
 
             if selecionar == "📈 Gerenciamento de estoque":
                 show_data()
@@ -170,9 +159,27 @@ def main() -> any:
             if selecionar == "📋 Análise de Rentabilidade":
                 show_analysis()
 
+            if selecionar == "💼 Consultar":
+                __consult__()
+
+            if selecionar == "💻 Developers":
+                developers()
+
+            if selecionar == "🚫 Sair":
+                logout()
+
             if selecionar == "📆 Histórico de vendas":
-                # Chamar a função
                 gerar_historico_vendas(lucro)
+
+            # -----------------------------------------------------------------
+
+            if selecionar == "🔮 Pedidos por Semana":
+                csv_file = 'app/data/pedidos.csv'
+                analise_pedidos_semana(csv_file)
+
+            if selecionar == "🎃 Tipo de marmita mais vendido":
+                csv_file = 'app/data/pedidos.csv'
+                __main__Marmitas__(csv_file)
 
             if selecionar == "📉 Estatísticas de vendas":
                 lucro = 'app/data/lucro.csv'
@@ -185,9 +192,6 @@ def main() -> any:
                 if csv_file is not None:
                     # Perform analysis and display the results
                     gerar_relatorios_financeiros(csv_file)
-
-            if selecionar == "💼 Consultar":
-                __consult__()
 
             if selecionar == "🖨️ Atualizar":
                 pedido = 'app/data/pedidos.csv'
@@ -212,11 +216,7 @@ def main() -> any:
                     # Chamar função para listar tipos de marmita e gerar gráfico
                     listar_tipos_marmita(csv_file)
 
-            if selecionar == "💻 Developers":
-                developers()
-
-            if selecionar == "🚫 Sair":
-                logout()
+            # -----------------------------------------------------------------
 
             st.sidebar.image(top_image,use_column_width='auto')
             st.sidebar.image(bottom_image,use_column_width='auto')
