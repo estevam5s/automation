@@ -12,7 +12,6 @@ from PIL import Image
 import streamlit as st
 from frontend.src.pages.home import homePage
 from frontend.src.pages.developer import developers
-from frontend.src.pages.lucroCSV import calcular_lucro
 from frontend.src.pages.marmitas import listar_tipos_marmita
 from frontend.src.pages.CRUD.delete.deletar import __delete__
 from frontend.src.pages.CRUD.insert.inserir import __insert__
@@ -201,29 +200,28 @@ def main() -> any:
             selecionar = st.sidebar.selectbox("Selecione a página", [
                             "🏠 Home",
                             "📊 Gráfico",
-                            "Calcular Lucro",
-                            "Consultar",
-                            "Inserir",
-                            "Atualizar",
-                            "Deletar",
-                            "Estatísticas de vendas",
-                            "Relatórios financeiros",
-                            "Análise de tendências",
-                            "Histórico de vendas",
-                            "Gerenciamento de estoque",
-                            "Tipo de marmita mais vendido",
-                            "Tipo de marmita menos vendido".capitalize(),
-                            "Tipo de marmita mais lucrativo",
-                            "Tipo de marmita menos lucrativo",
-                            "Tipo de marita que saiu",
-                            "Pedidos por Semana",
-                            "Análise de Rentabilidade",
-                            "Developers",
-                            "About",
-                            "Suporte ao cliente",
-                            "Documentação",
-                            "Ajuda e suporte",
-                            "Sair"
+                            "💼 Consultar",
+                            "🔏 Inserir",
+                            "🖨️ Atualizar",
+                            "🧨 Deletar",
+                            "📉 Estatísticas de vendas",
+                            "📐 Relatórios financeiros",
+                            "📌 Análise de tendências",
+                            "📆 Histórico de vendas",
+                            "📈 Gerenciamento de estoque",
+                            "🎃 Tipo de marmita mais vendido",
+                            "🎆 Tipo de marmita menos vendido".capitalize(),
+                            "🎑 Tipo de marmita mais lucrativo",
+                            "🧸 Tipo de marmita menos lucrativo",
+                            "🪀 Tipo de marita que saiu",
+                            "🔮 Pedidos por Semana",
+                            "📋 Análise de Rentabilidade",
+                            "💻 Developers",
+                            "⚠️ About",
+                            "🧑🏻‍🦱 Suporte ao cliente",
+                            "💾 Documentação",
+                            "🪖 Ajuda e suporte",
+                            "🚫 Sair"
                             ]
                         )
             
@@ -242,34 +240,34 @@ def main() -> any:
                 chart_type = st.selectbox('Escolha o tipo de gráfico', ['bolha', 'barra', 'linha', 'pizza', 'histograma', 'dispersao', 'matriz', 'funil', 'radar', 'area', 'torta', 'dendrograma', 'correlacao', 'waffle', 'calendario', 'radial'])
                 generate_chart(csv_file, chart_type)
 
-            if selecionar == "Pedidos por Semana":
+            if selecionar == "🔮 Pedidos por Semana":
                 csv_file = 'app/data/pedidos.csv'
                 # Perform analysis on the weekly orders
                 analise_pedidos_semana(csv_file)
 
-            if selecionar == "Tipo de marmita mais vendido":
+            if selecionar == "🎃 Tipo de marmita mais vendido":
                 csv_file = 'app/data/pedidos.csv'
                 __main__Marmitas__(csv_file)
 
-            if selecionar == "Consultar":
+            if selecionar == "💼 Consultar":
                 __consult__()
 
-            if selecionar == "Atualizar":
+            if selecionar == "🖨️ Atualizar":
                 pedido = 'app/data/pedidos.csv'
                 lucro = 'app/data/lucro.csv'
                 __atualizar__(lucro, pedido)
 
-            if selecionar == "Deletar":
+            if selecionar == "🧨 Deletar":
                 lucro = 'app/data/lucro.csv'
                 pedido = 'app/data/pedidos.csv'
                 __delete__(lucro, pedido)
 
-            if selecionar == "Inserir":
+            if selecionar == "🔏 Inserir":
                 lucro = 'app/data/lucro.csv'
                 pedido = 'app/data/pedidos.csv'
                 __insert__(lucro, pedido)
 
-            if selecionar == "Tipo de marita que saiu":
+            if selecionar == "🪀 Tipo de marita que saiu":
                 csv_file = 'app/data/pedidos.csv'
                 st.title("Análise de Marmitas")
 
@@ -280,24 +278,18 @@ def main() -> any:
                     # Chamar função para listar tipos de marmita e gerar gráfico
                     listar_tipos_marmita(csv_file)
 
-            if selecionar == "Developers":
+            if selecionar == "💻 Developers":
                 developers()
 
-            if selecionar == "Sair":
+            if selecionar == "🚫 Sair":
                 logout()
 
-            if selecionar == "Análise de Rentabilidade":
+            if selecionar == "📋 Análise de Rentabilidade":
                 csv_file = 'app/data/pedidos.csv'
                 # Check if a file is uploaded
                 if csv_file is not None:
                     # Perform analysis and display the results
                     analise(csv_file)
-            if selecionar == "Calcular Lucro":
-                csv_file = 'app/data/pedidos.csv'
-                # Check if a file is uploaded
-                if csv_file is not None:
-                    # Perform analysis and display the results
-                    calcular_lucro(csv_file, 'app/data/lucro.csv')
 
             st.sidebar.image(top_image,use_column_width='auto')
             st.sidebar.image(bottom_image,use_column_width='auto')
