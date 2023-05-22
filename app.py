@@ -186,7 +186,14 @@ def main() -> any:
             if selecionar == "📐 Relatórios financeiros":
                 csv_file = 'app/data/lucro.csv'
                 if csv_file is not None:
+                    
                     gerar_relatorios_financeiros(csv_file)
+            if selecionar == "🪀 Tipo de marita que saiu":
+                csv_file = 'app/data/pedidos.csv'
+                st.title("Análise de Marmitas")
+
+                if csv_file is not None:
+                    listar_tipos_marmita(csv_file)
 
             if selecionar == "🖨️ Atualizar":
                 pedido = 'app/data/pedidos.csv'
@@ -202,13 +209,6 @@ def main() -> any:
                 lucro = 'app/data/lucro.csv'
                 pedido = 'app/data/pedidos.csv'
                 __insert__(lucro, pedido)
-
-            if selecionar == "🪀 Tipo de marita que saiu":
-                csv_file = 'app/data/pedidos.csv'
-                st.title("Análise de Marmitas")
-
-                if csv_file is not None:
-                    listar_tipos_marmita(csv_file)
 
             # -----------------------------------------------------------------
 
