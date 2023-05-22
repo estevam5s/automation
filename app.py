@@ -80,7 +80,7 @@ def main() -> any:
                     "📆 Histórico de vendas",
                     "📈 Gerenciamento de estoque",
                     "🎃 Tipo de marmita mais vendido",
-                    "🎆 Tipo de marmita menos vendido".capitalize(),
+                    "🎆 Tipo de marmita menos vendido",
                     "🎑 Tipo de marmita mais lucrativo",
                     "🧸 Tipo de marmita menos lucrativo",
                     "🪀 Tipo de marita que saiu",
