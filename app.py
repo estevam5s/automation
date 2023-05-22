@@ -15,7 +15,7 @@ import streamlit as st
 from frontend.src.pages.home import homePage
 from frontend.src.pages.login import authenticate
 from frontend.src.pages.developer import developers
-from frontend.src.pages.marmitas import listar_tipos_marmita
+from frontend.src.pages.marmitas import show_data_table_marmita
 from frontend.src.pages.CRUD.delete.deletar import __delete__
 from frontend.src.pages.gerenciamento_estoque import show_data
 from frontend.src.pages.CRUD.consult.consultar import __consult__
@@ -179,20 +179,18 @@ def main() -> any:
 
             if selecionar == "🎃 Tipo de marmita mais vendido":
                 show_data_table()
-                
-            # -----------------------------------------------------------------
 
             if selecionar == "📐 Relatórios financeiros":
-                csv_file = 'app/data/lucro.csv'
-                if csv_file is not None:
-                    gerar_relatorios_financeiros(csv_file)
+                gerar_relatorios_financeiros()
 
             if selecionar == "🪀 Tipo de marita que saiu":
-                csv_file = 'app/data/pedidos.csv'
                 st.title("Análise de Marmitas")
+                show_data_table_marmita()
 
-                if csv_file is not None:
-                    listar_tipos_marmita(csv_file)
+            if selecionar == "🔏 Inserir":
+                __insert__()
+
+            # -----------------------------------------------------------------
 
             if selecionar == "🖨️ Atualizar":
                 pedido = 'app/data/pedidos.csv'
@@ -203,11 +201,6 @@ def main() -> any:
                 lucro = 'app/data/lucro.csv'
                 pedido = 'app/data/pedidos.csv'
                 __delete__(lucro, pedido)
-
-            if selecionar == "🔏 Inserir":
-                lucro = 'app/data/lucro.csv'
-                pedido = 'app/data/pedidos.csv'
-                __insert__(lucro, pedido)
 
             # -----------------------------------------------------------------
 

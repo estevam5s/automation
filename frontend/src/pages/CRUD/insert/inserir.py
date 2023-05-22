@@ -5,6 +5,7 @@ from deta import Deta
 import streamlit as st
 import matplotlib.pyplot as plt
 
+
 DETA_KEY = "e0u31gqkqju_2Ps7fJD5a1kAKF2Rr4Y31ASSdvUUeX8Y"
 
 # Initialize Deta
@@ -15,16 +16,6 @@ lucro_db = deta.Base("lucro")
 db_analysis = deta.Base("analysis")
 
 
-
-class CsvWriter:
-    def __init__(self, filename):
-        self.filename = filename
-
-    def write_data(self, data):
-        with open(self.filename, 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(data)
-# perfeito, só que mostra os dados em forma de tabela com pandas e numpy e com gráficos antes de enviar os dados
 class Pedido:
     def __init__(self, id, data, item, anotacoes):
         self.id = id
@@ -32,24 +23,26 @@ class Pedido:
         self.item = item
         self.anotacoes = anotacoes
 
-    def to_list(self):
-        return [self.id, self.data, self.item, self.anotacoes]
+    def to_dict(self):
+        return {
+            "ID": self.id,
+            "DATA": self.data,
+            "ITEM": self.item,
+            "ANOTAÇÕES": self.anotacoes
+        }
 
-def insertPedidos(file):
-    filename = file
-    writer = CsvWriter(filename)
 
+def insertPedidos():
     ID = st.text_input("ID:")
     DATA = st.text_input("DATA:")
     ITEM = st.text_input("ITEM:")
     anotacoes = st.text_input("ANOTAÇÕES:")
 
     pedido = Pedido(ID, DATA, ITEM, anotacoes)
-    data_to_write = pedido.to_list()
 
     if st.button("Visualizar Dados"):
         # Cria um dataframe com os dados inseridos
-        df = pd.DataFrame([data_to_write], columns=['ID', 'DATA', 'ITEM', 'ANOTAÇÕES'])
+        df = pd.DataFrame([pedido.to_dict()])
         
         # Exibe a tabela com os dados usando pandas
         st.write(df)
@@ -64,7 +57,7 @@ def insertPedidos(file):
         st.pyplot(plt)
 
     if st.button("Enviar"):
-        writer.write_data(data_to_write)
+        pedidos_db.put(pedido.to_dict())
         st.write("Dados inseridos com sucesso!")
 
 
@@ -76,17 +69,20 @@ class Lucro:
         self.anotacoes = anotacoes
         self.lucro = lucro
 
-    def to_list(self):
-        return [self.id, self.data, self.item, self.anotacoes, self.lucro]
+    def to_dict(self):
+        return {
+            "ID": self.id,
+            "DATA": self.data,
+            "ITEM": self.item,
+            "ANOTAÇÕES": self.anotacoes,
+            "LUCRO": self.lucro
+        }
 
-def insertLucro(file):
-    filename = file
-    writer = CsvWriter(filename)
-
+def insertLucro():
     ID = st.text_input("ID:")
     DATA = st.text_input("DATA:")
-    item = st.text_input("ITEM:")
-    anotacoes = st.text_input("ANOTAÇÕES:")
+    ITEM = st.text_input("ITEM:")
+    ANOTACOES = st.text_input("ANOTAÇÕES:")
     LUCRO = st.text_input("LUCRO:")
 
     if LUCRO:
@@ -99,12 +95,12 @@ def insertLucro(file):
         st.error("O valor de LUCRO não pode estar vazio.")
         return
 
-    lucro_obj = Lucro(ID, DATA, item, anotacoes, lucro_float)
-    data_to_write = lucro_obj.to_list()
+    lucro = Lucro(ID, DATA, ITEM, ANOTACOES, lucro_float)
+    data_to_insert = lucro.to_dict()
 
     # Exibir tabela de dados
     st.subheader('Dados inseridos')
-    df = pd.DataFrame([data_to_write], columns=['ID', 'DATA', 'ITEM', 'ANOTAÇÕES', 'LUCRO'])
+    df = pd.DataFrame([data_to_insert], columns=['ID', 'DATA', 'ITEM', 'ANOTAÇÕES', 'LUCRO'])
     st.dataframe(df)
 
     # Exibir gráfico de lucro
@@ -118,21 +114,19 @@ def insertLucro(file):
     st.pyplot(fig)
 
     if st.button("Salvar"):
-        writer.write_data(data_to_write)
+        lucro_db.put(data_to_insert)
         st.write("Dados inseridos com sucesso!")
 
 
-
-def __insert__(lucro, pedidos):
+def __insert__():
     st.title("Inserir Dados")
     opcoes = ["Pedidos", "Lucro do Estabelecimento"]
     escolha = st.radio("Selecione o tipo de dado a ser inserido:", opcoes)
 
     if escolha == "Pedidos":
-        insertPedidos(pedidos)
+        insertPedidos()
     elif escolha == "Lucro do Estabelecimento":
-        insertLucro(lucro)
-
+        insertLucro()
 
 
 def insert_data_lucro():
