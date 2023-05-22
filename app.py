@@ -5,6 +5,7 @@
 #                              --- Code Description ---                                    #
 #         Streamlit app designed for visualizing U.S. real estate data and market trends   #
 ############################################################################################
+# e0zg3sgc85x_ceEEmEgJp3ivsXKEsU12aG9scwQFSKWg
 
 
 import streamlit as st
@@ -12,6 +13,7 @@ from PIL import Image
 from frontend.src.pages.home import homePage
 from frontend.src.pages.lucroCSV import calcular_lucro
 from frontend.src.pages.CRUD.update.updateLucroEstabelecimento import insertLucro
+from frontend.src.pages.CRUD.delete.deletaLucroEstabelecimento import deleteLucro
 from frontend.src.pages.analise_de_rentabilidade import analise
 from frontend.src.pages.gráficos.bolha.bubble import generate_chart
 from frontend.src.pages.developer import developers
@@ -179,7 +181,7 @@ def logout():
     st.session_state.pop('authenticated', None)
     # Rerun the script to replace the main page with the login page
     st.experimental_rerun()
-        
+
 
 def main() -> any:
     # Check if the user is authenticated
@@ -203,6 +205,7 @@ def main() -> any:
                             "Calcular Lucro",
                             "Consultar Lucro",
                             "Atualizar Lucro",
+                            "Deletar Lucro",
                             "Inserir",
                             "Estatísticas de vendas",
                             "Relatórios financeiros",
@@ -254,6 +257,10 @@ def main() -> any:
             if selecionar == "Atualizar Lucro":
                 csv_file = 'app/data/lucro.csv'
                 insertLucro(csv_file)
+
+            if selecionar == "Deletar Lucro":
+                csv_file = 'app/data/lucro.csv'
+                deleteLucro(csv_file)
 
             if selecionar == "Tipo de marita que saiu":
                 csv_file = 'app/data/pedidos.csv'
