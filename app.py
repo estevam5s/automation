@@ -11,6 +11,7 @@ import streamlit as st
 from PIL import Image
 from frontend.src.pages.home import homePage
 from frontend.src.pages.lucroCSV import calcular_lucro
+from frontend.src.pages.CRUD.update.updateLucroEstabelecimento import insertLucro
 from frontend.src.pages.analise_de_rentabilidade import analise
 from frontend.src.pages.gráficos.bolha.bubble import generate_chart
 from frontend.src.pages.developer import developers
@@ -199,6 +200,10 @@ def main() -> any:
                             "🏠 Home",
                             "🎯 Consultar Dados",
                             "📊 Gráfico",
+                            "Calcular Lucro",
+                            "Consultar Lucro",
+                            "Atualizar Lucro",
+                            "Inserir",
                             "Estatísticas de vendas",
                             "Relatórios financeiros",
                             "Análise de tendências",
@@ -211,8 +216,6 @@ def main() -> any:
                             "Tipo de marita que saiu",
                             "Pedidos por Semana",
                             "Análise de Rentabilidade",
-                            "Calcular Lucro",
-                            "Consultar Lucro",
                             "Developers",
                             "About",
                             "Suporte ao cliente",
@@ -247,6 +250,10 @@ def main() -> any:
             if selecionar == "Tipo de marmita mais vendido":
                 csv_file = 'app/data/pedidos.csv'
                 __main__Marmitas__(csv_file)
+            
+            if selecionar == "Atualizar Lucro":
+                csv_file = 'app/data/lucro.csv'
+                insertLucro(csv_file)
 
             if selecionar == "Tipo de marita que saiu":
                 csv_file = 'app/data/pedidos.csv'
