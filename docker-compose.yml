@@ -1,0 +1,20 @@
+version: "3"
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: user
+      MYSQL_DATABASE: big_data_app_estacio
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  app:
+    image: big_data_app_estacio
+    ports:
+      - "8501:8501"
+    depends_on:
+      - db
