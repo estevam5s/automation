@@ -10,6 +10,8 @@
 
 from PIL import Image
 import streamlit as st
+from frontend.src.pages.generate_insights import rentabilidade
+from frontend.src.pages.gerenciamento_estoque import gerenciamento_estoque
 from frontend.src.pages.historico_vendas import gerar_historico_vendas
 from frontend.src.pages.home import homePage
 from frontend.src.pages.developer import developers
@@ -252,8 +254,17 @@ def main() -> any:
                 csv_file = 'app/data/pedidos.csv'
                 __main__Marmitas__(csv_file)
 
-            if selecionar == "📆 Histórico de vendas":
+            if selecionar == "📈 Gerenciamento de estoque":
                 lucro = 'app/data/lucro.csv'
+                # Chamar a função
+                gerenciamento_estoque(lucro)
+
+            if selecionar == "📋 Análise de Rentabilidade":
+                lucro = 'app/data/lucro.csv'
+                rentabilidadeCSV = 'app/data/rentabilidade.csv'
+                rentabilidade(lucro, rentabilidadeCSV)
+
+            if selecionar == "📆 Histórico de vendas":
                 # Chamar a função
                 gerar_historico_vendas(lucro)
 
@@ -303,13 +314,6 @@ def main() -> any:
 
             if selecionar == "🚫 Sair":
                 logout()
-
-            if selecionar == "📋 Análise de Rentabilidade":
-                csv_file = 'app/data/pedidos.csv'
-                # Check if a file is uploaded
-                if csv_file is not None:
-                    # Perform analysis and display the results
-                    analise(csv_file)
 
             st.sidebar.image(top_image,use_column_width='auto')
             st.sidebar.image(bottom_image,use_column_width='auto')

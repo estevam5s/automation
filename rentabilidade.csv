@@ -1,0 +1,16 @@
+ID,DATA,ITEM,ANOTAÇÕES,LUCRO,CUSTO,QUANTIDADE,Rentabilidade
+1,2023-02-06 00:00:00,200 Marmitas,"8 Panqueca bolonhesa 4 Estrogonofe de frango, 4 File de peito de frango 4 Sobrecoxa de desossada grelhada 0 Sobrecoxa desossada ensopada",2000,0,0,inf
+2,2023-02-13 00:00:00,30 Marmitas,8 Panqueca bolonhesa 8 Estrogonofe de frango 4 File de peito de frango 6 Sobrecoxa de desossada grelhada 4 Sobrecoxa desossada ensopada,300,0,0,inf
+3,2023-02-20 00:00:00,30 Marmitas,8 Panqueca bolonhesa 8 Estrogonofe de frango 6 File de peito de frango 4 Sobrecoxa de desossada grelhada 4 Sobrecoxa desossada ensopada,300,0,0,inf
+4,2023-02-27 00:00:00,40 Marmitas,10 Panqueca bolonhesa 8 Estrogonofe de frango 8 File de peito de frango 8 Sobrecoxa de desossada grelhada 6 Sobrecoxa desossada ensopada,400,0,0,inf
+5,2023-03-06 00:00:00,60 Marmitas,14 Panqueca bolonhesa 12 Estrogonofe de frango 12 File de peito de frango 12 Sobrecoxa de desossada grelhada 10 Sobrecoxa desossada ensopada,600,0,0,inf
+6,2023-03-13 00:00:00,80 Marmitas,18 Panqueca bolonhesa 16 Estrogonofe de frango 12 File de peito de frango 20 Sobrecoxa de desossada grelhad 14 Sobrecoxa desossada ensopada,800,0,0,inf
+7,2023-03-20 00:00:00,70 Marmitas,18 Panqueca bolonhesa 16 Estrogonofe de frango 14 File de peito de frango 10 Sobrecoxa de desossada grelhada 12 Sobrecoxa desossada ensopada,700,0,0,inf
+8,2023-03-27 00:00:00,70 Marmitas,18 Panqueca bolonhesa 12 Estrogonofe de frango 10 File de peito de frango 14 Sobrecoxa de desossada grelhada 16 Sobrecoxa desossada ensopada,700,0,0,inf
+9,2023-04-03 00:00:00,90 Marmitas,24 Panqueca bolonhesa 18 Estrogonofe de frango 16 File de peito de frango 16 Sobrecoxa de desossada grelhada 16 Sobrecoxa desossada ensopada,900,0,0,inf
+10,2023-04-10 00:00:00,100 Marmitas,30 Panqueca bolonhesa 18 Estrogonofe de frango 20 File de peito de frango 16 Sobrecoxa de desossada grelhada 16 Sobrecoxa desossada ensopada,1000,0,0,inf
+11,2023-04-17 00:00:00,120 Marmitas,30 Panqueca bolonhesa 18 Estrogonofe de frango 26 File de peito de frango 24 Sobrecoxa de desossada grelhada 22 Sobrecoxa desossada ensopada,1200,0,0,inf
+12,2023-04-24 00:00:00,100 Marmitas,28 Panqueca bolonhesa 20 Estrogonofe de frango 18 File de peito de frango 18 Sobrecoxa de desossada grelhada 16 Sobrecoxa desossada ensopada,1000,0,0,inf
+13,2023-05-01 00:00:00,110 Marmitas,30 Panqueca bolonhesa 22 Estrogonofe de frango 20 File de peito de frango 20 Sobrecoxa de desossada grelhada 18 Sobrecoxa desossada ensopada,1100,0,0,inf
+14,2023-05-08 00:00:00,130 Marmitas,34 Panqueca bolonhesa 26 Estrogonofe de frango 24 File de peito de frango 24 Sobrecoxa de desossada grelhada 22 Sobrecoxa desossada ensopada,1300,0,0,inf
+15,2023-05-15 00:00:00,130 Marmitas,38 Panqueca bolonhesa 30 Estrogonofe de frango 20 File de peito de frango 22 Sobrecoxa de desossada grelhada 20 Sobrecoxa desossada ensopada,1300,0,0,inf
