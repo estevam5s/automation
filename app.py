@@ -11,24 +11,23 @@
 from PIL import Image
 from deta import Deta
 import streamlit as st
-from frontend.src.pages.generate_insights import rentabilidade
-from frontend.src.pages.gerenciamento_estoque import gerenciamento_estoque
-from frontend.src.pages.historico_vendas import gerar_historico_vendas
 from frontend.src.pages.home import homePage
+from frontend.src.pages.login import authenticate
 from frontend.src.pages.developer import developers
 from frontend.src.pages.marmitas import listar_tipos_marmita
-from frontend.src.pages.login import authenticate
-from frontend.src.pages.estatisticaVendas import calcular_estatisticas_vendas
 from frontend.src.pages.CRUD.delete.deletar import __delete__
 from frontend.src.pages.CRUD.insert.inserir import __insert__
+from frontend.src.pages.generate_insights import rentabilidade
 from frontend.src.pages.analise_de_rentabilidade import analise
 from frontend.src.pages.CRUD.consult.consultar import __consult__
 from frontend.src.pages.CRUD.update.atualizar import __atualizar__
 from frontend.src.pages.gráficos.bolha.bubble import generate_chart
 from frontend.src.pages.pedidosSemana import analise_pedidos_semana
 from frontend.src.pages.marmitaMaisVendidas import __main__Marmitas__
+from frontend.src.pages.historico_vendas import gerar_historico_vendas
+from frontend.src.pages.gerenciamento_estoque import gerenciamento_estoque
+from frontend.src.pages.estatisticaVendas import calcular_estatisticas_vendas
 from frontend.src.pages.relatorioFinanceiro import gerar_relatorios_financeiros
-
 
 
 # Load environment variables
