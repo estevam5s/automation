@@ -4,15 +4,13 @@ from deta import Deta
 import streamlit as st
 import matplotlib.pyplot as plt
 
+
 DETA_KEY = "e0u31gqkqju_2Ps7fJD5a1kAKF2Rr4Y31ASSdvUUeX8Y"
 # Initialize Deta
 deta = Deta(DETA_KEY)
 
 pedidos_db = deta.Base("pedidos")
 lucro_db = deta.Base("lucro")
-
-
-
 
 
 # Interface para consulta de lucros

@@ -33,3 +33,5 @@ def __menu__():
         "🚫 Sair"
         ]
     )
+
+    return selecionar
