@@ -5,9 +5,10 @@
 #                              --- Code Description ---                                    #
 #         Streamlit app designed for visualizing U.S. real estate data and market trends   #
 ############################################################################################
-# e0zg3sgc85x_ceEEmEgJp3ivsXKEsU12aG9scwQFSKWg
 
 
+import numpy as np
+import pandas as pd
 from PIL import Image
 from deta import Deta
 import streamlit as st
@@ -16,10 +17,10 @@ from frontend.src.pages.login import authenticate
 from frontend.src.pages.developer import developers
 from frontend.src.pages.marmitas import listar_tipos_marmita
 from frontend.src.pages.CRUD.delete.deletar import __delete__
-from frontend.src.pages.CRUD.insert.inserir import __insert__
+from frontend.src.pages.CRUD.insert.inserir import __insert__, insert_data_lucro, insert_data_pedidos
 from frontend.src.pages.generate_insights import rentabilidade
 from frontend.src.pages.analise_de_rentabilidade import analise
-from frontend.src.pages.CRUD.consult.consultar import __consult__
+from frontend.src.pages.CRUD.consult.consultar import __consult__, consultar_dados_lucro, consultar_pedidos
 from frontend.src.pages.CRUD.update.atualizar import __atualizar__
 from frontend.src.pages.gráficos.bolha.bubble import generate_chart
 from frontend.src.pages.pedidosSemana import analise_pedidos_semana
@@ -37,6 +38,10 @@ DETA_KEY = "e0u31gqkqju_2Ps7fJD5a1kAKF2Rr4Y31ASSdvUUeX8Y"
 deta = Deta(DETA_KEY)
 
 db = deta.Base("users")
+db_analysis = deta.Base("analysis")
+lucro_db = deta.Base("lucro")
+pedidos_db = deta.Base("pedidos")
+rentabilidade_db = deta.Base("rentabilidade")
 
 
 def logout():
@@ -65,6 +70,10 @@ def main() -> any:
                             "🏠 Home",
                             "insert",
                             "consult",
+                            "insert Analysis",
+                            "consult Analysis",
+                            "Insert Dados importantes",
+                            "Consult Dados importantes",
                             "📊 Gráfico",
                             "💼 Consultar",
                             "🔏 Inserir",
@@ -104,6 +113,185 @@ def main() -> any:
                 pass
                 # Inserir senha no banco de dados
                 db.put({"password": "user"}, "user")
+
+            if selecionar == "consult Analysis":
+                def query_data():
+                    # Consulta os dados do banco 'analysis'
+                    data = db_analysis.fetch().items
+
+                    # Cria um DataFrame pandas com os dados consultados
+                    df = pd.DataFrame(data, columns=['ID', 'DATA', 'ITEM', 'ANOTAÇÕES', 'Custo Total', 'Receita', 'Rentabilidade'])
+
+                    # Exibe a tabela com pandas e numpy
+                    st.title("Consulta de Dados")
+                    st.dataframe(df)
+
+                    # Exibe informações adicionais com numpy
+                    st.subheader("Informações adicionais:")
+                    st.write("Média da Receita:", np.mean(df['Receita']))
+                    st.write("Máximo de Rentabilidade:", np.max(df['Rentabilidade']))
+                    st.write("Mínimo de Custo Total:", np.min(df['Custo Total']))
+                    st.write("Total de Itens:", np.sum(df['ITEM']))
+                query_data()
+
+            if selecionar == "Insert Dados importantes":
+                insert_data_lucro()
+                insert_data_pedidos()
+
+            if selecionar == "Consult Dados importantes":
+                pass
+                # Chamada da função para consultar os pedidos
+                consultar_pedidos()
+                # Executar a função para exibir os dados
+                consultar_dados_lucro()
+
+            if selecionar == "insert Analysis":
+                # Define a function to insert data into the 'analysis' database
+                def insert_data():
+                    data = [
+                        {
+                        "ID": 1,
+                        "DATA": "2023-02-06 00:00:00",
+                        "ITEM": 20,
+                        "ANOTAÇÕES": 8,
+                        "Custo Total": 160,
+                        "Receita": 200,
+                        "Rentabilidade": 25.0
+                    },
+                    {
+                        "ID": 2,
+                        "DATA": "2023-02-13 00:00:00",
+                        "ITEM": 30,
+                        "ANOTAÇÕES": 8,
+                        "Custo Total": 240,
+                        "Receita": 300,
+                        "Rentabilidade": 25.0
+                    },
+                    {
+                        "ID": 3,
+                        "DATA": "2023-02-20 00:00:00",
+                        "ITEM": 30,
+                        "ANOTAÇÕES": 8,
+                        "Custo Total": 240,
+                        "Receita": 300,
+                        "Rentabilidade": 25.0
+                    },
+                    {
+                        "ID": 4,
+                        "DATA": "2023-02-27 00:00:00",
+                        "ITEM": 40,
+                        "ANOTAÇÕES": 10,
+                        "Custo Total": 400,
+                        "Receita": 400,
+                        "Rentabilidade": 0.0
+                    },
+                    {
+                        "ID": 5,
+                        "DATA": "2023-03-06 00:00:00",
+                        "ITEM": 60,
+                        "ANOTAÇÕES": 14,
+                        "Custo Total": 840,
+                        "Receita": 600,
+                        "Rentabilidade": -28.57142857142857
+                    },
+                    {
+                        "ID": 6,
+                        "DATA": "2023-03-13 00:00:00",
+                        "ITEM": 80,
+                        "ANOTAÇÕES": 18,
+                        "Custo Total": 1440,
+                        "Receita": 800,
+                        "Rentabilidade": -44.44444444444444
+                    },
+                    {
+                        "ID": 7,
+                        "DATA": "2023-03-20 00:00:00",
+                        "ITEM": 70,
+                        "ANOTAÇÕES": 18,
+                        "Custo Total": 1260,
+                        "Receita": 700,
+                        "Rentabilidade": -44.44444444444444
+                    },
+                    {
+                        "ID": 8,
+                        "DATA": "2023-03-27 00:00:00",
+                        "ITEM": 70,
+                        "ANOTAÇÕES": 18,
+                        "Custo Total": 1260,
+                        "Receita": 700,
+                        "Rentabilidade": -44.44444444444444
+                    },
+                    {
+                        "ID": 9,
+                        "DATA": "2023-04-03 00:00:00",
+                        "ITEM": 90,
+                        "ANOTAÇÕES": 24,
+                        "Custo Total": 2160,
+                        "Receita": 900,
+                        "Rentabilidade": -58.333333333333336
+                    },
+                    {
+                        "ID": 10,
+                        "DATA": "2023-04-10 00:00:00",
+                        "ITEM": 100,
+                        "ANOTAÇÕES": 30,
+                        "Custo Total": 3000,
+                        "Receita": 1000,
+                        "Rentabilidade": -66.66666666666666
+                    },
+                    {
+                        "ID": 11,
+                        "DATA": "2023-04-17 00:00:00",
+                        "ITEM": 120,
+                        "ANOTAÇÕES": 30,
+                        "Custo Total": 3600,
+                        "Receita": 1200,
+                        "Rentabilidade": -66.66666666666666
+                    },
+                    {
+                        "ID": 12,
+                        "DATA": "2023-04-24 00:00:00",
+                        "ITEM": 100,
+                        "ANOTAÇÕES": 28,
+                        "Custo Total": 2800,
+                        "Receita": 1000,
+                        "Rentabilidade": -64.28571428571429
+                    },
+                    {
+                        "ID": 13,
+                        "DATA": "2023-05-01 00:00:00",
+                        "ITEM": 110,
+                        "ANOTAÇÕES": 30,
+                        "Custo Total": 3300,
+                        "Receita": 1100,
+                        "Rentabilidade": -66.66666666666666
+                    },
+                    {
+                        "ID": 14,
+                        "DATA": "2023-05-08 00:00:00",
+                        "ITEM": 130,
+                        "ANOTAÇÕES": 34,
+                        "Custo Total": 4420,
+                        "Receita": 1300,
+                        "Rentabilidade": -70.58823529411765
+                    },
+                    {
+                        "ID": 15,
+                        "DATA": "2023-05-15 00:00:00",
+                        "ITEM": 130,
+                        "ANOTAÇÕES": 38,
+                        "Custo Total": 4940,
+                        "Receita": 1300,
+                        "Rentabilidade": -73.68421052631578
+                    }
+                ]
+
+                    # Insert the data into the 'analysis' database
+                    db_analysis.put_many(data)
+
+                # Call the insert_data function to insert the data into the 'analysis' database
+                insert_data()
+
             
             if selecionar == "consult":# Consultar senha do banco de dados
                 result = db.get("user")

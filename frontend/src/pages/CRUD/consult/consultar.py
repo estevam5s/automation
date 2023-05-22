@@ -1,7 +1,15 @@
-import streamlit as st
-import pandas as pd
 import numpy as np
+import pandas as pd
+from deta import Deta
+import streamlit as st
 import matplotlib.pyplot as plt
+
+DETA_KEY = "e0u31gqkqju_2Ps7fJD5a1kAKF2Rr4Y31ASSdvUUeX8Y"
+# Initialize Deta
+deta = Deta(DETA_KEY)
+
+pedidos_db = deta.Base("pedidos")
+lucro_db = deta.Base("lucro")
 
 # Interface para consulta de lucros
 class LucroConsultaInterface:
@@ -127,3 +135,63 @@ def __consult__():
         lucro_interface = LucroConsultaStreamlit()
         lucros = lucro_service.obter_lucros()
         lucro_interface.exibir_lucros(lucros)
+
+
+
+def consultar_pedidos():
+    # Consultar todos os pedidos
+    pedidos = pedidos_db.fetch().items
+
+    # Criar uma lista vazia para armazenar os dados dos pedidos
+    lista_pedidos = []
+
+    # Preencher a lista com os dados dos pedidos
+    for pedido in pedidos:
+        lista_pedidos.append(pedido)
+
+    # Criar um DataFrame a partir da lista de pedidos
+    df = pd.DataFrame(lista_pedidos)
+
+    # Reordenar as colunas do DataFrame
+    df = df[['ID', 'DATA', 'ITEM', 'ANOTAÇÕES']]
+
+    # Exibir o DataFrame usando o Streamlit
+    st.title("Pedidos")
+    st.dataframe(df)
+
+
+def consultar_dados_lucro():
+    # Consultar todos os registros no banco de dados
+    registros = pedidos_db.fetch().items
+
+    # Criar listas vazias para cada coluna
+    ids = []
+    datas = []
+    itens = []
+    anotacoes = []
+    lucros = []
+
+    # Extrair os dados de cada registro e armazenar nas listas correspondentes
+    for registro in registros:
+        ids.append(registro["ID"])
+        datas.append(registro["DATA"])
+        itens.append(registro["ITEM"])
+        anotacoes.append(registro["ANOTAÇÕES"])
+        if "LUCRO" in registro:
+            lucros.append(registro["LUCRO"])
+        else:
+            lucros.append(np.nan)
+
+    # Criar um DataFrame com os dados
+    data = {
+        "ID": ids,
+        "DATA": datas,
+        "ITEM": itens,
+        "ANOTAÇÕES": anotacoes,
+        "LUCRO": lucros
+    }
+    df = pd.DataFrame(data)
+
+    # Exibir os dados usando o Streamlit
+    st.title("Consulta de Dados - Lucro")
+    st.table(df)
