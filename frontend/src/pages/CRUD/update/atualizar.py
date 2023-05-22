@@ -2,6 +2,16 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from deta import Deta
+
+
+DETA_KEY = "e0zg3sgc85x_rLjU5Zy93MAHEY8UaoCnMGDJSNZiiHNR"
+
+# Initialize Deta
+deta = Deta(DETA_KEY)
+
+lucro_db = deta.Base("analiseLucro")
+pedidos_db = deta.Base("pedidos")
 
 
 # Interface para consulta de lucros
@@ -33,27 +43,32 @@ class LucroService:
         return self.lucro_query.obter_lucros()
 
     def atualizar_lucro(self, lucro_id, novo_lucro):
-        self.lucro_query.salvar_lucro(lucro_id, novo_lucro)
+        lucro = self.lucro_query.obter_lucro_por_id(lucro_id)
+        if lucro:
+            lucro["LUCRO"] = novo_lucro
+            self.lucro_query.salvar_lucro(lucro)
+            return True
+        return False
 
 # Query para buscar e salvar os lucros
-class CsvLucroQuery:
-    def __init__(self, csv_file):
-        self.csv_file = csv_file
+class DetaLucroQuery:
+    def __init__(self, db):
+        self.db = db
 
     def obter_lucros(self):
-        df = pd.read_csv(self.csv_file)
-        lucros = df['LUCRO'].tolist()
+        registros = self.db.fetch().items
+        lucros = [registro["LUCRO"] for registro in registros]
         return lucros
 
-    def salvar_lucro(self, lucro_id, novo_lucro):
-        df = pd.read_csv(self.csv_file)
-        df.loc[lucro_id - 1, 'LUCRO'] = novo_lucro
-        df.to_csv(self.csv_file, index=False)
+    def obter_lucro_por_id(self, lucro_id):
+        return self.db.get(str(lucro_id)).item
+
+    def salvar_lucro(self, lucro):
+        self.db.put(lucro)
 
 # Função principal
-def insertLucro(file):
-    csv_file = file
-    lucro_query = CsvLucroQuery(csv_file)
+def insertLucro():
+    lucro_query = DetaLucroQuery(lucro_db)
     lucro_service = LucroService(lucro_query)
     lucros = lucro_service.obter_lucros()
 
@@ -65,8 +80,53 @@ def insertLucro(file):
     novo_lucro = st.sidebar.number_input('Novo Lucro', value=lucros[lucro_id - 1])
 
     if st.sidebar.button('Atualizar'):
-        lucro_service.atualizar_lucro(lucro_id, novo_lucro)
-        st.sidebar.success(f'Lucro ID {lucro_id} atualizado com sucesso!')
+        if lucro_service.atualizar_lucro(lucro_id, novo_lucro):
+            st.sidebar.success(f'Lucro ID {lucro_id} atualizado com sucesso!')
+        else:
+            st.sidebar.error(f'Lucro ID {lucro_id} não encontrado.')
+
+
+
+def show_data_table():
+    # Configura a cor de fundo para verde
+    st.markdown(
+        """
+            <style>
+                body {
+                    background-color: #00FF00;
+                }
+            </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Insights Criativos
+    st.title("Análise de Dados de Lucro")
+
+    st.markdown("Bem-vindo à nossa ferramenta de análise de dados de lucro!")
+    st.markdown("Aqui você pode explorar e obter insights valiosos sobre os dados de lucro da sua empresa.")
+
+    # Cria o serviço de lucro
+    lucro_query = DetaLucroQuery(lucro_db)
+    lucro_service = LucroService(lucro_query)
+
+    # Obtém os lucros
+    lucros = lucro_service.obter_lucros()
+
+    # Cria a interface de consulta de lucros e exibe
+    lucro_consulta = LucroConsultaStreamlit()
+    lucro_consulta.exibir_lucros(lucros)
+
+    st.sidebar.subheader('Atualizar Lucro')
+    lucro_id = st.sidebar.selectbox('ID do Lucro', range(1, len(lucros)+1))
+    novo_lucro = st.sidebar.number_input('Novo Lucro', value=lucros[lucro_id - 1])
+
+    if st.sidebar.button('Atualizar'):
+        if lucro_service.atualizar_lucro(lucro_id, novo_lucro):
+            st.sidebar.success(f'Lucro ID {lucro_id} atualizado com sucesso!')
+        else:
+            st.sidebar.error(f'Lucro ID {lucro_id} não encontrado.')
+
 
 # Interface para consulta de dados
 class DadosConsultaInterface:
@@ -97,27 +157,29 @@ class DadosService:
         return self.dados_query.obter_dados()
 
     def atualizar_dado(self, dado_id, novo_dado):
-        self.dados_query.salvar_dado(dado_id, novo_dado)
+        registros = self.dados_query.obter_registros()
+        registros[dado_id - 1]["ITEM"] = novo_dado
+        self.dados_query.salvar_registros(registros)
 
 # Query para buscar e salvar os dados
-class CsvDadosQuery:
-    def __init__(self, csv_file):
-        self.csv_file = csv_file
+class DetaDadosQuery:
+    def __init__(self, db):
+        self.db = db
 
     def obter_dados(self):
-        df = pd.read_csv(self.csv_file)
-        dados = df['ITEM'].tolist()
+        registros = self.db.fetch().items
+        dados = [registro["ITEM"] for registro in registros]
         return dados
 
-    def salvar_dado(self, dado_id, novo_dado):
-        df = pd.read_csv(self.csv_file)
-        df.loc[dado_id - 1, 'ITEM'] = novo_dado
-        df.to_csv(self.csv_file, index=False)
+    def obter_registros(self):
+        return self.db.fetch().items
+
+    def salvar_registros(self, registros):
+        self.db.put_many(registros)
 
 # Função principal
-def atualizarPedidos(file):
-    csv_file = file
-    dados_query = CsvDadosQuery(csv_file)
+def atualizarPedidos():
+    dados_query = DetaDadosQuery(pedidos_db)
     dados_service = DadosService(dados_query)
     dados = dados_service.obter_dados()
 
@@ -125,14 +187,16 @@ def atualizarPedidos(file):
     dados_interface.exibir_dados(dados)
 
     st.sidebar.subheader('Atualizar Dado')
-    dado_id = st.sidebar.selectbox('ID do Dado', range(1, len(dados)+1))
+    dado_id = st.sidebar.selectbox('ID do Dado', range(1, len(dados) + 1))
     novo_dado = st.sidebar.text_input('Novo Dado', value=dados[dado_id - 1])
 
     if st.sidebar.button('Atualizar'):
         dados_service.atualizar_dado(dado_id, novo_dado)
         st.sidebar.success(f'Dado ID {dado_id} atualizado com sucesso!')
 
-def __atualizar__(lucro, pedido):
+
+
+def __atualizar__():
     st.title('Atualizar Dados')
 
     # Opções de atualização
@@ -141,6 +205,7 @@ def __atualizar__(lucro, pedido):
 
     # Verifica qual opção foi escolhida
     if escolha == 'Atualizar Pedidos':
-        atualizarPedidos(pedido)
+        # Executa a função principal
+        atualizarPedidos()
     elif escolha == 'Atualizar Lucro do Estabelecimento':
-        insertLucro(lucro)
+        show_data_table()

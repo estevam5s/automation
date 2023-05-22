@@ -1,10 +1,40 @@
+from deta import Deta
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def gerar_historico_vendas(file):
-    # Carregar dados do arquivo CSV
-    df = pd.read_csv(file)
+
+DETA_KEY = "e0zg3sgc85x_rLjU5Zy93MAHEY8UaoCnMGDJSNZiiHNR"
+
+
+# Initialize Deta
+deta = Deta(DETA_KEY)
+
+lucro_db = deta.Base("analiseLucro")
+
+
+def main():
+    # Consultar dados do banco
+    registros = lucro_db.fetch().items
+
+    # Criar listas vazias para cada coluna
+    datas = []
+    itens = []
+    lucros = []
+
+    # Extrair os dados de cada registro e armazenar nas listas correspondentes
+    for registro in registros:
+        datas.append(registro["DATA"])
+        itens.append(registro["ITEM"])
+        lucros.append(registro["LUCRO"])
+
+    # Criar DataFrame com os dados
+    data = {
+        "DATA": datas,
+        "ITEM": itens,
+        "LUCRO": lucros
+    }
+    df = pd.DataFrame(data)
 
     # Converter a coluna DATA para o tipo datetime
     df['DATA'] = pd.to_datetime(df['DATA'])
@@ -35,3 +65,26 @@ def gerar_historico_vendas(file):
     ax.set_ylabel('Vendas')
     ax.set_title('Vendas por Mês')
     st.pyplot(fig)
+
+
+def gerar_historico_vendas():
+    # Configura a cor de fundo para verde
+    st.markdown(
+        """
+        <style>
+        body {
+            background-color: #00FF00;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Insights Criativos
+    st.title("Análise de Dados de Lucro")
+
+    st.markdown("Bem-vindo à nossa ferramenta de análise de dados de lucro!")
+    st.markdown("Aqui você pode explorar e obter insights valiosos sobre os dados de lucro da sua empresa.")
+
+    # Gerar histórico de vendas
+    main()

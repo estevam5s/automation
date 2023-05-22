@@ -170,7 +170,7 @@ def main() -> any:
                 logout()
 
             if selecionar == "📆 Histórico de vendas":
-                gerar_historico_vendas(lucro)
+                gerar_historico_vendas()
 
             if selecionar == "🔮 Pedidos por Semana":
                 analise_pedidos_semana()
@@ -194,14 +194,8 @@ def main() -> any:
             if selecionar == "🧨 Deletar":
                 __delete__()
 
-            # -----------------------------------------------------------------
-
             if selecionar == "🖨️ Atualizar":
-                pedido = 'app/data/pedidos.csv'
-                lucro = 'app/data/lucro.csv'
-                __atualizar__(lucro, pedido)
-
-            # -----------------------------------------------------------------
+                __atualizar__()
 
             st.sidebar.image(top_image,use_column_width='auto')
             st.sidebar.image(bottom_image,use_column_width='auto')
