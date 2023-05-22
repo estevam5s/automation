@@ -19,8 +19,7 @@ from frontend.src.pages.marmitas import listar_tipos_marmita
 from frontend.src.pages.CRUD.delete.deletar import __delete__
 from frontend.src.pages.CRUD.insert.inserir import __insert__, insert_data_lucro, insert_data_pedidos
 from frontend.src.pages.generate_insights import rentabilidade
-from frontend.src.pages.analise_de_rentabilidade import analise
-from frontend.src.pages.CRUD.consult.consultar import __consult__, consultar_dados_lucro, consultar_pedidos
+from frontend.src.pages.CRUD.consult.consultar import __consult__
 from frontend.src.pages.CRUD.update.atualizar import __atualizar__
 from frontend.src.pages.gráficos.bolha.bubble import generate_chart
 from frontend.src.pages.pedidosSemana import analise_pedidos_semana
@@ -107,7 +106,6 @@ def main() -> any:
                 homePage()
 
             if selecionar == "insert":
-                pass
                 # Inserir senha no banco de dados
                 db.put({"password": "user"}, "user")
 
@@ -129,6 +127,7 @@ def main() -> any:
                     st.write("Máximo de Rentabilidade:", np.max(df['Rentabilidade']))
                     st.write("Mínimo de Custo Total:", np.min(df['Custo Total']))
                     st.write("Total de Itens:", np.sum(df['ITEM']))
+
                 query_data()
 
             if selecionar == "Insert Dados importantes":
@@ -208,9 +207,6 @@ def main() -> any:
             if selecionar == "🪀 Tipo de marita que saiu":
                 csv_file = 'app/data/pedidos.csv'
                 st.title("Análise de Marmitas")
-
-                # Selecionar arquivo CSV
-                # csv_file = st.file_uploader("Carregar arquivo CSV", type=['csv'])
 
                 if csv_file is not None:
                     # Chamar função para listar tipos de marmita e gerar gráfico
