@@ -1,0 +1,16 @@
+[deprecation]
+showPyplotGlobalUse = false
+
+[theme]
+backgroundColor = "#202040"
+secondaryBackgroundColor = "#543864"
+primaryColor="#FF6363"
+textColor = "#fafafa"
+font="sans serif"
+
+[server]
+maxUploadSize = 100
+runOnSave=true
+
+[browser]
+gatherUsageStats = false
