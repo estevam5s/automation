@@ -68,7 +68,7 @@ def main() -> any:
             selecionar = st.sidebar.selectbox("Selecione a página", 
                 [
                     "🏠 Home",
-                    "consult Analysis",
+                    "📲 Consult Analysis",
                     "📊 Gráfico",
                     "💼 Consultar",
                     "🔏 Inserir",
@@ -108,7 +108,7 @@ def main() -> any:
                 # Inserir senha no banco de dados
                 db.put({"password": "user"}, "user")
 
-            if selecionar == "consult Analysis":
+            if selecionar == "📲 Consult Analysis":
                 def query_data():
                     # Consulta os dados do banco 'analysis'
                     data = db_analysis.fetch().items
