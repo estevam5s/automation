@@ -8,22 +8,19 @@
 # e0zg3sgc85x_ceEEmEgJp3ivsXKEsU12aG9scwQFSKWg
 
 
-import streamlit as st
 from PIL import Image
+import streamlit as st
 from frontend.src.pages.home import homePage
-from frontend.src.pages.lucroCSV import calcular_lucro
-from frontend.src.pages.CRUD.update.updateLucroEstabelecimento import insertLucro
-from frontend.src.pages.CRUD.update.atualizarPedidos import atualizarPedidos
-from frontend.src.pages.CRUD.update.atualizar import __atualizar__
-from frontend.src.pages.CRUD.delete.deletaLucroEstabelecimento import deleteLucro
-from frontend.src.pages.CRUD.delete.deleteEstabelecimento import deletePedidos
-from frontend.src.pages.analise_de_rentabilidade import analise
-from frontend.src.pages.gráficos.bolha.bubble import generate_chart
 from frontend.src.pages.developer import developers
-from frontend.src.pages.pedidosSemana import analise_pedidos_semana
-from frontend.src.pages.CRUD.consult.data_table import show_data_table
+from frontend.src.pages.lucroCSV import calcular_lucro
 from frontend.src.pages.marmitas import listar_tipos_marmita
+from frontend.src.pages.CRUD.delete.deletar import __delete__
+from frontend.src.pages.analise_de_rentabilidade import analise
+from frontend.src.pages.CRUD.update.atualizar import __atualizar__
+from frontend.src.pages.gráficos.bolha.bubble import generate_chart
+from frontend.src.pages.pedidosSemana import analise_pedidos_semana
 from frontend.src.pages.marmitaMaisVendidas import __main__Marmitas__
+from frontend.src.pages.CRUD.consult.data_table import show_data_table
 from frontend.src.pages.CRUD.consult.lucroEstabelecimento import CsvLucroQuery, LucroConsultaStreamlit, LucroService
 
 
@@ -232,6 +229,7 @@ def main() -> any:
                             "Sair"
                             ]
                         )
+            
             # Add restaurant information to the sidebar
             st.sidebar.title("Informações do Restaurante")
             st.sidebar.markdown("Este é um restaurante que oferece comida em marmitex.")
@@ -264,13 +262,10 @@ def main() -> any:
                 lucro = 'app/data/lucro.csv'
                 __atualizar__(lucro, pedido)
 
-            if selecionar == "Deletar Lucro":
-                csv_file = 'app/data/lucro.csv'
-                deleteLucro(csv_file)
-
-            if selecionar == "Deletar Pedidos":
-                csv_file = 'app/data/pedidos.csv'
-                deletePedidos(csv_file)
+            if selecionar == "Deletar":
+                lucro = 'app/data/lucro.csv'
+                pedido = 'app/data/pedidos.csv'
+                __delete__(lucro, pedido)
 
             if selecionar == "Tipo de marita que saiu":
                 csv_file = 'app/data/pedidos.csv'
