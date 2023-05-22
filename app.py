@@ -17,17 +17,17 @@ from frontend.src.pages.login import authenticate
 from frontend.src.pages.developer import developers
 from frontend.src.pages.marmitas import listar_tipos_marmita
 from frontend.src.pages.CRUD.delete.deletar import __delete__
-from frontend.src.pages.CRUD.insert.inserir import __insert__, insert_data_lucro, insert_data_pedidos
-from frontend.src.pages.generate_insights import rentabilidade
+from frontend.src.pages.gerenciamento_estoque import show_data
 from frontend.src.pages.CRUD.consult.consultar import __consult__
 from frontend.src.pages.CRUD.update.atualizar import __atualizar__
 from frontend.src.pages.gráficos.bolha.bubble import generate_chart
 from frontend.src.pages.pedidosSemana import analise_pedidos_semana
 from frontend.src.pages.marmitaMaisVendidas import __main__Marmitas__
+from frontend.src.pages.analise_de_rentabilidade import show_analysis
 from frontend.src.pages.historico_vendas import gerar_historico_vendas
-from frontend.src.pages.gerenciamento_estoque import gerenciamento_estoque, show_data
 from frontend.src.pages.estatisticaVendas import calcular_estatisticas_vendas
 from frontend.src.pages.relatorioFinanceiro import gerar_relatorios_financeiros
+from frontend.src.pages.CRUD.insert.inserir import __insert__, insert_data_lucro, insert_data_pedidos
 
 
 # Load environment variables
@@ -168,9 +168,7 @@ def main() -> any:
                 show_data()
 
             if selecionar == "📋 Análise de Rentabilidade":
-                lucro = 'app/data/lucro.csv'
-                rentabilidadeCSV = 'app/data/rentabilidade.csv'
-                rentabilidade(lucro, rentabilidadeCSV)
+                show_analysis()
 
             if selecionar == "📆 Histórico de vendas":
                 # Chamar a função

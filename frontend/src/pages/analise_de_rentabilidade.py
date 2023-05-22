@@ -1,28 +1,49 @@
+from deta import Deta
+import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import streamlit as st
 
-def analise(csv_file):
-    # Read the CSV file
-    df = pd.read_csv(csv_file)
+DETA_KEY = "e0u31gqkqju_2Ps7fJD5a1kAKF2Rr4Y31ASSdvUUeX8Y"
 
-    # Extract the numeric part from 'ITEM' column
-    df['ITEM'] = df['ITEM'].str.split().str[0]
+# Initialize Deta
+deta = Deta(DETA_KEY)
 
-    # Convert 'ITEM' column to numeric
-    df['ITEM'] = pd.to_numeric(df['ITEM'])
+analysis_db = deta.Base("analysis")
 
-    # Convert 'ANOTAÇÕES' column to numeric
-    df['ANOTAÇÕES'] = df['ANOTAÇÕES'].str.split().str[0].astype(int)
+def analise():
+    # Consultar todos os registros no banco de dados
+    registros = analysis_db.fetch().items
 
-    # Calculate the total cost for each row
-    df['Custo Total'] = df['ITEM'] * df['ANOTAÇÕES']
+    # Criar listas vazias para cada coluna
+    ids = []
+    datas = []
+    itens = []
+    anotacoes = []
+    custo_total = []
+    receita = []
+    rentabilidade = []
 
-    # Calculate the revenue for each row (assuming a fixed price of R$10 per item)
-    df['Receita'] = df['ITEM'] * 10
+    # Extrair os dados de cada registro e armazenar nas listas correspondentes
+    for registro in registros:
+        ids.append(registro["ID"])
+        datas.append(registro["DATA"])
+        itens.append(registro["ITEM"])
+        anotacoes.append(registro["ANOTAÇÕES"])
+        custo_total.append(registro["Custo Total"])
+        receita.append(registro["Receita"])
+        rentabilidade.append(registro["Rentabilidade"])
 
-    # Calculate the profitability for each row
-    df['Rentabilidade'] = (df['Receita'] - df['Custo Total']) / df['Custo Total'] * 100
+    # Criar um DataFrame com os dados
+    data = {
+        "ID": ids,
+        "DATA": datas,
+        "ITEM": itens,
+        "ANOTAÇÕES": anotacoes,
+        "Custo Total": custo_total,
+        "Receita": receita,
+        "Rentabilidade": rentabilidade
+    }
+    df = pd.DataFrame(data)
 
     # Create a bar chart for the profitability analysis
     fig, ax = plt.subplots()
@@ -33,3 +54,26 @@ def analise(csv_file):
 
     # Display the chart in Streamlit
     st.pyplot(fig)
+
+
+def show_analysis():
+    # Configura a cor de fundo para verde
+    st.markdown(
+        """
+        <style>
+        body {
+            background-color: #00FF00;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Insights Criativos
+    st.title("Análise de Rentabilidade")
+
+    st.markdown("Bem-vindo à nossa ferramenta de análise de rentabilidade!")
+    st.markdown("Aqui você pode explorar e obter insights valiosos sobre a rentabilidade dos seus dados de análise.")
+
+    # Exibir a análise
+    analise()
