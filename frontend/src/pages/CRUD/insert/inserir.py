@@ -12,6 +12,8 @@ deta = Deta(DETA_KEY)
 
 pedidos_db = deta.Base("pedidos")
 lucro_db = deta.Base("lucro")
+db_analysis = deta.Base("analysis")
+
 
 
 class CsvWriter:
@@ -342,3 +344,146 @@ def insert_data_pedidos():
 
     # Insert the data into the 'analysis' database
     pedidos_db.put_many(data)
+
+
+def insert_data():
+    data = [
+        {
+            "ID": 1,
+            "DATA": "2023-02-06 00:00:00",
+            "ITEM": 20,
+            "ANOTAÇÕES": 8,
+            "Custo Total": 160,
+            "Receita": 200,
+            "Rentabilidade": 25.0
+        },
+        {
+            "ID": 2,
+            "DATA": "2023-02-13 00:00:00",
+            "ITEM": 30,
+            "ANOTAÇÕES": 8,
+            "Custo Total": 240,
+            "Receita": 300,
+            "Rentabilidade": 25.0
+        },
+        {
+            "ID": 3,
+            "DATA": "2023-02-20 00:00:00",
+            "ITEM": 30,
+            "ANOTAÇÕES": 8,
+            "Custo Total": 240,
+            "Receita": 300,
+            "Rentabilidade": 25.0
+        },
+        {
+            "ID": 4,
+            "DATA": "2023-02-27 00:00:00",
+            "ITEM": 40,
+            "ANOTAÇÕES": 10,
+            "Custo Total": 400,
+            "Receita": 400,
+            "Rentabilidade": 0.0
+        },
+        {
+            "ID": 5,
+            "DATA": "2023-03-06 00:00:00",
+            "ITEM": 60,
+            "ANOTAÇÕES": 14,
+            "Custo Total": 840,
+            "Receita": 600,
+            "Rentabilidade": -28.57142857142857
+        },
+        {
+            "ID": 6,
+            "DATA": "2023-03-13 00:00:00",
+            "ITEM": 80,
+            "ANOTAÇÕES": 18,
+            "Custo Total": 1440,
+            "Receita": 800,
+            "Rentabilidade": -44.44444444444444
+        },
+        {
+            "ID": 7,
+            "DATA": "2023-03-20 00:00:00",
+            "ITEM": 70,
+            "ANOTAÇÕES": 18,
+            "Custo Total": 1260,
+            "Receita": 700,
+            "Rentabilidade": -44.44444444444444
+        },
+        {
+            "ID": 8,
+            "DATA": "2023-03-27 00:00:00",
+            "ITEM": 70,
+            "ANOTAÇÕES": 18,
+            "Custo Total": 1260,
+            "Receita": 700,
+            "Rentabilidade": -44.44444444444444
+        },
+        {
+            "ID": 9,
+            "DATA": "2023-04-03 00:00:00",
+            "ITEM": 90,
+            "ANOTAÇÕES": 24,
+            "Custo Total": 2160,
+            "Receita": 900,
+            "Rentabilidade": -58.333333333333336
+        },
+        {
+            "ID": 10,
+            "DATA": "2023-04-10 00:00:00",
+            "ITEM": 100,
+            "ANOTAÇÕES": 30,
+            "Custo Total": 3000,
+            "Receita": 1000,
+            "Rentabilidade": -66.66666666666666
+        },
+        {
+            "ID": 11,
+            "DATA": "2023-04-17 00:00:00",
+            "ITEM": 120,
+            "ANOTAÇÕES": 30,
+            "Custo Total": 3600,
+            "Receita": 1200,
+            "Rentabilidade": -66.66666666666666
+        },
+        {
+            "ID": 12,
+            "DATA": "2023-04-24 00:00:00",
+            "ITEM": 100,
+            "ANOTAÇÕES": 28,
+            "Custo Total": 2800,
+            "Receita": 1000,
+            "Rentabilidade": -64.28571428571429
+        },
+        {
+            "ID": 13,
+            "DATA": "2023-05-01 00:00:00",
+            "ITEM": 110,
+            "ANOTAÇÕES": 30,
+            "Custo Total": 3300,
+            "Receita": 1100,
+            "Rentabilidade": -66.66666666666666
+        },
+        {
+            "ID": 14,
+            "DATA": "2023-05-08 00:00:00",
+            "ITEM": 130,
+            "ANOTAÇÕES": 34,
+            "Custo Total": 4420,
+            "Receita": 1300,
+            "Rentabilidade": -70.58823529411765
+        },
+        {
+            "ID": 15,
+            "DATA": "2023-05-15 00:00:00",
+            "ITEM": 130,
+            "ANOTAÇÕES": 38,
+            "Custo Total": 4940,
+            "Receita": 1300,
+            "Rentabilidade": -73.68421052631578
+        }
+    ]
+
+    # Insert the data into the 'analysis' database
+    db_analysis.put_many(data)

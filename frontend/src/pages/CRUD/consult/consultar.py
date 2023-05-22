@@ -11,6 +11,10 @@ deta = Deta(DETA_KEY)
 pedidos_db = deta.Base("pedidos")
 lucro_db = deta.Base("lucro")
 
+
+
+
+
 # Interface para consulta de lucros
 class LucroConsultaInterface:
     def exibir_lucros(self, lucros):
@@ -41,13 +45,13 @@ class LucroService:
         return self.lucro_query.obter_lucros()
 
 # Query para buscar os lucros
-class CsvLucroQuery:
-    def __init__(self, csv_file):
-        self.csv_file = csv_file
+class DetaLucroQuery:
+    def __init__(self, db):
+        self.db = db
 
     def obter_lucros(self):
-        df = pd.read_csv(self.csv_file)
-        lucros = df['LUCRO'].tolist()
+        registros = self.db.fetch().items
+        lucros = [registro["LUCRO"] for registro in registros]
         return lucros
     
 
@@ -61,12 +65,71 @@ class Menu:
         self.selected_option = st.sidebar.selectbox("Selecione a coluna:", self.options)
 
 
+def show_data_table_lucro():
+    # Configura a cor de fundo para verde
+    st.markdown(
+        """
+        <style>
+        body {
+            background-color: #00FF00;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Insights Criativos
+    st.title("Análise de Dados de Lucro")
+
+    st.markdown("Bem-vindo à nossa ferramenta de análise de dados de lucro!")
+    st.markdown("Aqui você pode explorar e obter insights valiosos sobre os dados de lucro da sua empresa.")
+
+    # Cria o menu e exibe
+    menu = Menu()
+    menu.show()
+
+    # Cria o serviço de lucro
+    lucro_query = DetaLucroQuery(lucro_db)
+    lucro_service = LucroService(lucro_query)
+
+    # Obtém os lucros
+    lucros = lucro_service.obter_lucros()
+
+    # Cria a interface de consulta de lucros e exibe
+    lucro_consulta = LucroConsultaStreamlit()
+    lucro_consulta.exibir_lucros(lucros)
+
+
 class DataTable:
-    def __init__(self, csv_file):
-        self.csv_file = csv_file
+    def __init__(self, db):
+        self.db = db
     
     def load_data(self):
-        return pd.read_csv(self.csv_file)
+        # Consultar todos os registros no banco de dados
+        registros = self.db.fetch().items
+
+        # Criar listas vazias para cada coluna
+        ids = []
+        datas = []
+        itens = []
+        anotacoes = []
+
+        # Extrair os dados de cada registro e armazenar nas listas correspondentes
+        for registro in registros:
+            ids.append(registro["ID"])
+            datas.append(registro["DATA"])
+            itens.append(registro["ITEM"])
+            anotacoes.append(registro["ANOTAÇÕES"])
+
+        # Criar um DataFrame com os dados
+        data = {
+            "ID": ids,
+            "DATA": datas,
+            "ITEM": itens,
+            "ANOTAÇÕES": anotacoes
+        }
+        df = pd.DataFrame(data)
+        return df
     
     def show_table(self, column):
         df = self.load_data()
@@ -114,7 +177,7 @@ def show_data_table():
     menu.show()
 
     # Cria a tabela de dados e exibe
-    data_table = DataTable("app/data/pedidos.csv")
+    data_table = DataTable(pedidos_db)
     data_table.show_table(menu.selected_option)
 
 
@@ -127,15 +190,7 @@ def __consult__():
         show_data_table()
     elif escolha == "Lucro do Estabelecimento":
         st.title('Consulta de Lucros')
-        csv_file = 'app/data/lucro.csv'
-        # Check if a file is uploaded
-        # Dependências
-        lucro_query = CsvLucroQuery(csv_file)
-        lucro_service = LucroService(lucro_query)
-        lucro_interface = LucroConsultaStreamlit()
-        lucros = lucro_service.obter_lucros()
-        lucro_interface.exibir_lucros(lucros)
-
+        show_data_table_lucro()
 
 
 def consultar_pedidos():
