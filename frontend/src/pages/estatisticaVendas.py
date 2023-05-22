@@ -1,15 +1,24 @@
+from deta import Deta
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def calcular_estatisticas_vendas(file):
-    # Carregar dados do arquivo CSV
-    df = pd.read_csv(file)
+DETA_KEY = "e0u31gqkqju_2Ps7fJD5a1kAKF2Rr4Y31ASSdvUUeX8Y"
+
+# Initialize Deta
+deta = Deta(DETA_KEY)
+
+lucro_db = deta.Base("lucro")
+
+def main():
+    # Consultar dados do banco Deta
+    registros = lucro_db.fetch().items
+    df = pd.DataFrame(registros)
 
     # Estatísticas gerais
     vendas_totais = df['LUCRO'].sum()
     vendas_por_categoria = df.groupby('ITEM')['LUCRO'].sum()
-    vendas_por_regiao = df.groupby('ANOTAÇÕES')['LUCRO'].sum()
+    vendas_por_anotacoes = df.groupby('ANOTAÇÕES')['LUCRO'].sum()
 
     # Exibir estatísticas gerais
     st.subheader('Estatísticas de Vendas')
@@ -19,7 +28,7 @@ def calcular_estatisticas_vendas(file):
     st.dataframe(vendas_por_categoria)
 
     st.subheader('Vendas por Anotações')
-    st.dataframe(vendas_por_regiao)
+    st.dataframe(vendas_por_anotacoes)
 
     # Gráfico de vendas por categoria
     st.subheader('Gráfico de Vendas por Categoria')
@@ -33,8 +42,30 @@ def calcular_estatisticas_vendas(file):
     # Gráfico de vendas por Anotações
     st.subheader('Gráfico de Vendas por Anotações')
     fig, ax = plt.subplots()
-    vendas_por_regiao.plot(kind='bar', ax=ax)
+    vendas_por_anotacoes.plot(kind='bar', ax=ax)
     ax.set_xlabel('Anotações')
     ax.set_ylabel('Vendas')
     ax.set_title('Vendas por Anotações')
     st.pyplot(fig)
+
+
+def calcular_estatisticas_vendas():
+    # Configura a cor de fundo para verde
+    st.markdown(
+        """
+        <style>
+        body {
+            background-color: #00FF00;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Insights Criativos
+    st.title("Análise de Dados de Lucro")
+
+    st.markdown("Bem-vindo à nossa ferramenta de análise de dados de lucro!")
+    st.markdown("Aqui você pode explorar e obter insights valiosos sobre os dados de lucro da sua empresa.")
+
+    main()

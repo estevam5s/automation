@@ -1,10 +1,21 @@
+from deta import Deta
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def analise_pedidos_semana(csv_file):
-    # Read the CSV file into a DataFrame
-    df = pd.read_csv(csv_file)
+DETA_KEY = "e0u31gqkqju_2Ps7fJD5a1kAKF2Rr4Y31ASSdvUUeX8Y"
+
+# Initialize Deta
+deta = Deta(DETA_KEY)
+
+pedidos_db = deta.Base("pedidos")
+
+def analise_pedidos_semana():
+    # Consultar todos os registros no banco de dados
+    registros = pedidos_db.fetch().items
+
+    # Criar DataFrame com os dados
+    df = pd.DataFrame(registros)
 
     # Convert the 'DATA' column to datetime
     df['DATA'] = pd.to_datetime(df['DATA'])
@@ -35,3 +46,5 @@ def analise_pedidos_semana(csv_file):
     st.write(f'Total Orders: {total_orders}')
     st.write(f'Total Weeks: {total_weeks}')
     st.write(f'Average Orders per Week: {avg_orders_per_week:.2f}')
+
+

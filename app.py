@@ -171,26 +171,21 @@ def main() -> any:
             if selecionar == "📆 Histórico de vendas":
                 gerar_historico_vendas(lucro)
 
-            # -----------------------------------------------------------------
-
             if selecionar == "🔮 Pedidos por Semana":
-                csv_file = 'app/data/pedidos.csv'
-                analise_pedidos_semana(csv_file)
+                analise_pedidos_semana()
+
+            if selecionar == "📉 Estatísticas de vendas":
+                calcular_estatisticas_vendas()
+
+            # -----------------------------------------------------------------
 
             if selecionar == "🎃 Tipo de marmita mais vendido":
                 csv_file = 'app/data/pedidos.csv'
                 __main__Marmitas__(csv_file)
 
-            if selecionar == "📉 Estatísticas de vendas":
-                lucro = 'app/data/lucro.csv'
-                # Chamar a função
-                calcular_estatisticas_vendas(lucro)
-
             if selecionar == "📐 Relatórios financeiros":
                 csv_file = 'app/data/lucro.csv'
-                # Check if a file is uploaded
                 if csv_file is not None:
-                    # Perform analysis and display the results
                     gerar_relatorios_financeiros(csv_file)
 
             if selecionar == "🖨️ Atualizar":
@@ -213,7 +208,6 @@ def main() -> any:
                 st.title("Análise de Marmitas")
 
                 if csv_file is not None:
-                    # Chamar função para listar tipos de marmita e gerar gráfico
                     listar_tipos_marmita(csv_file)
 
             # -----------------------------------------------------------------
