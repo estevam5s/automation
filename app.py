@@ -15,14 +15,14 @@ import streamlit as st
 from frontend.src.pages.home import homePage
 from frontend.src.pages.login import authenticate
 from frontend.src.pages.developer import developers
-from frontend.src.pages.marmitas import show_data_table_marmita
 from frontend.src.pages.CRUD.delete.deletar import __delete__
 from frontend.src.pages.gerenciamento_estoque import show_data
+from frontend.src.pages.marmitas import show_data_table_marmita
 from frontend.src.pages.CRUD.consult.consultar import __consult__
+from frontend.src.pages.marmitaMaisVendidas import show_data_table
 from frontend.src.pages.CRUD.update.atualizar import __atualizar__
 from frontend.src.pages.gráficos.bolha.bubble import generate_chart
 from frontend.src.pages.pedidosSemana import analise_pedidos_semana
-from frontend.src.pages.marmitaMaisVendidas import show_data_table
 from frontend.src.pages.analise_de_rentabilidade import show_analysis
 from frontend.src.pages.historico_vendas import gerar_historico_vendas
 from frontend.src.pages.estatisticaVendas import calcular_estatisticas_vendas
@@ -31,12 +31,12 @@ from frontend.src.pages.CRUD.insert.inserir import __insert__, insert_data_lucro
 
 
 # Load environment variables
-DETA_KEY = "e0u31gqkqju_2Ps7fJD5a1kAKF2Rr4Y31ASSdvUUeX8Y"
+DETA_KEY = "e0zg3sgc85x_rLjU5Zy93MAHEY8UaoCnMGDJSNZiiHNR"
 
 # Initialize Deta
 deta = Deta(DETA_KEY)
 
-db = deta.Base("users")
+db = deta.Base("database")
 db_analysis = deta.Base("analysis")
 lucro_db = deta.Base("lucro")
 pedidos_db = deta.Base("pedidos")
@@ -55,6 +55,7 @@ def main() -> any:
     if 'authenticated' not in st.session_state:
         # Authenticate the user
         authenticate()
+        pass
     else:
         # Authenticate the user
         if 'authenticated' in st.session_state and st.session_state.authenticated:
@@ -68,6 +69,7 @@ def main() -> any:
             selecionar = st.sidebar.selectbox("Selecione a página", 
                 [
                     "🏠 Home",
+                    "Insert Dados importantes",
                     "📲 Consult Analysis",
                     "📊 Gráfico",
                     "💼 Consultar",
