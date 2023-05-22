@@ -1,17 +1,34 @@
-import streamlit as st
 import pandas as pd
+from deta import Deta
+import streamlit as st
 import plotly.express as px
 
 
-def generate_chart(csv_file, chart_type):
-    # Carregar os dados do arquivo .csv
-    data = pd.read_csv(csv_file)
+# Load environment variables
+DETA_KEY = "e0u31gqkqju_2Ps7fJD5a1kAKF2Rr4Y31ASSdvUUeX8Y"
+
+# Initialize Deta
+deta = Deta(DETA_KEY)
+
+lucro_db = deta.Base("lucro")
+pedidos_db = deta.Base("pedidos")
+
+
+def generate_chart(db, chart_type):
+    # Consultar todos os registros no banco de dados
+    registros = db.fetch().items
+
+    # Criar um DataFrame com os dados
+    data = {
+        "DATA": [registro["DATA"] for registro in registros]
+    }
+    df = pd.DataFrame(data)
 
     # Converter a coluna 'DATA' para o tipo datetime
-    data['DATA'] = pd.to_datetime(data['DATA'])
+    df['DATA'] = pd.to_datetime(df['DATA'])
 
     # Agrupar os pedidos por data e contar o número de pedidos
-    orders = data.groupby('DATA').size().reset_index(name='QUANTIDADE')
+    orders = df.groupby('DATA').size().reset_index(name='QUANTIDADE')
 
     if chart_type == 'bolha':
         # Gerar um gráfico de bolha usando o Plotly Express
@@ -26,6 +43,7 @@ def generate_chart(csv_file, chart_type):
 
         # Exibir o gráfico no Streamlit
         st.plotly_chart(fig)
+        
     elif chart_type == 'pizza':
         # Gerar um gráfico de pizza usando o Plotly Express
         fig = px.pie(orders, values='QUANTIDADE', names='DATA')
@@ -81,10 +99,6 @@ def generate_chart(csv_file, chart_type):
         # Exibir o gráfico no Streamlit
         st.plotly_chart(fig)
 
-
-
-
-
     elif chart_type == 'histograma':
         # Histograma
         fig = px.histogram(orders, x='QUANTIDADE', nbins=10)
@@ -101,7 +115,6 @@ def generate_chart(csv_file, chart_type):
         fig.update_layout(title='Boxplot de Quantidade de Pedidos',
                           yaxis_title='Quantidade de Pedidos')
         
-
     elif chart_type == 'scatter3d':
         # Gráfico de dispersão 3D
         fig = px.scatter_3d(orders, x='DATA', y='QUANTIDADE', z='QUANTIDADE')

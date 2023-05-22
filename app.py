@@ -68,7 +68,6 @@ def main() -> any:
             selecionar = st.sidebar.selectbox("Selecione a página", 
                 [
                     "🏠 Home",
-                    "consult",
                     "consult Analysis",
                     "📊 Gráfico",
                     "💼 Consultar",
@@ -146,10 +145,15 @@ def main() -> any:
                     st.write("Não foi possível encontrar a senha do usuário.")
 
             if selecionar == "📊 Gráfico":
-                csv_file = 'app/data/pedidos.csv'  # Caminho relativo para o arquivo .csv
-                # Exemplo de uso
+                # Insights Criativos
+                st.title("Análise de Dados de Pedidos - Gráficos")
+
+                st.markdown("Bem-vindo à nossa ferramenta de análise de dados de pedidos!")
+                st.markdown("Aqui você pode explorar e obter insights valiosos sobre os dados de pedidos da sua empresa.")
+
                 chart_type = st.selectbox('Escolha o tipo de gráfico', ['bolha', 'barra', 'linha', 'pizza', 'histograma', 'dispersao', 'matriz', 'funil', 'radar', 'area', 'torta', 'dendrograma', 'correlacao', 'waffle', 'calendario', 'radial'])
-                generate_chart(csv_file, chart_type)
+                # Gerar o gráfico com base no tipo selecionado
+                generate_chart(pedidos_db, chart_type)
 
             if selecionar == "🔮 Pedidos por Semana":
                 csv_file = 'app/data/pedidos.csv'
