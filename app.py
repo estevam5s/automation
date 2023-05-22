@@ -15,13 +15,12 @@ from frontend.src.pages.developer import developers
 from frontend.src.pages.lucroCSV import calcular_lucro
 from frontend.src.pages.marmitas import listar_tipos_marmita
 from frontend.src.pages.CRUD.delete.deletar import __delete__
+from frontend.src.pages.CRUD.consult.consultar import __consult__
 from frontend.src.pages.analise_de_rentabilidade import analise
 from frontend.src.pages.CRUD.update.atualizar import __atualizar__
 from frontend.src.pages.gráficos.bolha.bubble import generate_chart
 from frontend.src.pages.pedidosSemana import analise_pedidos_semana
 from frontend.src.pages.marmitaMaisVendidas import __main__Marmitas__
-from frontend.src.pages.CRUD.consult.data_table import show_data_table
-from frontend.src.pages.CRUD.consult.lucroEstabelecimento import CsvLucroQuery, LucroConsultaStreamlit, LucroService
 
 
 def autenticar_usuario(senha):
@@ -200,10 +199,8 @@ def main() -> any:
             st.sidebar.title("Opções de Consulta")
             selecionar = st.sidebar.selectbox("Selecione a página", [
                             "🏠 Home",
-                            "🎯 Consultar Dados",
                             "📊 Gráfico",
                             "Calcular Lucro",
-                            "Consultar Lucro",
                             "Consultar",
                             "Inserir",
                             "Atualizar",
@@ -238,9 +235,6 @@ def main() -> any:
             if selecionar == "🏠 Home":
                 homePage()
 
-            if selecionar == "🎯 Consultar Dados":
-                show_data_table()
-
             if selecionar == "📊 Gráfico":
                 csv_file = 'app/data/pedidos.csv'  # Caminho relativo para o arquivo .csv
                 # Exemplo de uso
@@ -255,6 +249,9 @@ def main() -> any:
             if selecionar == "Tipo de marmita mais vendido":
                 csv_file = 'app/data/pedidos.csv'
                 __main__Marmitas__(csv_file)
+
+            if selecionar == "Consultar":
+                __consult__()
 
             if selecionar == "Atualizar":
                 pedido = 'app/data/pedidos.csv'
@@ -295,16 +292,6 @@ def main() -> any:
                 if csv_file is not None:
                     # Perform analysis and display the results
                     calcular_lucro(csv_file, 'app/data/lucro.csv')
-            if selecionar == "Consultar Lucro":
-                st.title('Consulta de Lucros')
-                csv_file = 'app/data/lucro.csv'
-                # Check if a file is uploaded
-                # Dependências
-                lucro_query = CsvLucroQuery(csv_file)
-                lucro_service = LucroService(lucro_query)
-                lucro_interface = LucroConsultaStreamlit()
-                lucros = lucro_service.obter_lucros()
-                lucro_interface.exibir_lucros(lucros)
 
             st.sidebar.image(top_image,use_column_width='auto')
             st.sidebar.image(bottom_image,use_column_width='auto')

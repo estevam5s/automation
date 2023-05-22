@@ -1,6 +1,47 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
+# Interface para consulta de lucros
+class LucroConsultaInterface:
+    def exibir_lucros(self, lucros):
+        raise NotImplementedError
+
+# Implementação da interface utilizando Streamlit
+class LucroConsultaStreamlit(LucroConsultaInterface):
+    def exibir_lucros(self, lucros):
+        st.subheader('Tabela de Lucros')
+        df_lucros = pd.DataFrame({'LUCRO': lucros})
+        st.dataframe(df_lucros)
+
+        st.subheader('Gráfico de Lucros')
+        fig, ax = plt.subplots()
+        ax.plot(np.arange(len(lucros)), lucros)
+        ax.set_xlabel('Período')
+        ax.set_ylabel('LUCRO')
+        ax.set_title('Lucros ao longo do tempo')
+        st.pyplot(fig)
+
+
+# Serviço para obter os lucros
+class LucroService:
+    def __init__(self, lucro_query):
+        self.lucro_query = lucro_query
+
+    def obter_lucros(self):
+        return self.lucro_query.obter_lucros()
+
+# Query para buscar os lucros
+class CsvLucroQuery:
+    def __init__(self, csv_file):
+        self.csv_file = csv_file
+
+    def obter_lucros(self):
+        df = pd.read_csv(self.csv_file)
+        lucros = df['LUCRO'].tolist()
+        return lucros
+    
 
 class Menu:
     def __init__(self):
@@ -67,3 +108,22 @@ def show_data_table():
     # Cria a tabela de dados e exibe
     data_table = DataTable("app/data/pedidos.csv")
     data_table.show_table(menu.selected_option)
+
+
+def __consult__():
+    st.title("Consultar Dados")
+    opcoes = ["Pedidos", "Lucro do Estabelecimento"]
+    escolha = st.radio("Selecione o tipo de dado a ser consultado:", opcoes)
+
+    if escolha == "Pedidos":
+        show_data_table()
+    elif escolha == "Lucro do Estabelecimento":
+        st.title('Consulta de Lucros')
+        csv_file = 'app/data/lucro.csv'
+        # Check if a file is uploaded
+        # Dependências
+        lucro_query = CsvLucroQuery(csv_file)
+        lucro_service = LucroService(lucro_query)
+        lucro_interface = LucroConsultaStreamlit()
+        lucros = lucro_service.obter_lucros()
+        lucro_interface.exibir_lucros(lucros)
