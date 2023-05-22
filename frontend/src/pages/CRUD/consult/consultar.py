@@ -10,7 +10,7 @@ DETA_KEY = "e0zg3sgc85x_rLjU5Zy93MAHEY8UaoCnMGDJSNZiiHNR"
 deta = Deta(DETA_KEY)
 
 pedidos_db = deta.Base("pedidos")
-lucro_db = deta.Base("lucro")
+lucro_db = deta.Base("analiseLucro")
 
 
 # Interface para consulta de lucros

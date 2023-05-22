@@ -38,7 +38,7 @@ deta = Deta(DETA_KEY)
 
 db = deta.Base("database")
 db_analysis = deta.Base("analysis")
-lucro_db = deta.Base("lucro")
+lucro_db = deta.Base("analiseLucro")
 pedidos_db = deta.Base("pedidos")
 rentabilidade_db = deta.Base("rentabilidade")
 
@@ -69,7 +69,6 @@ def main() -> any:
             selecionar = st.sidebar.selectbox("Selecione a página", 
                 [
                     "🏠 Home",
-                    "Insert Dados importantes",
                     "📲 Consult Analysis",
                     "📊 Gráfico",
                     "💼 Consultar",

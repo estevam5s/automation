@@ -14,6 +14,8 @@ DETA_KEY = "e0zg3sgc85x_rLjU5Zy93MAHEY8UaoCnMGDJSNZiiHNR"
 deta = Deta(DETA_KEY)
 
 pedidos_db = deta.Base("pedidos")
+lucro_db = deta.Base("analiseLucro")
+
 
 # Função para exibir a tabela de pedidos
 def exibir_tabela_pedidos(df):
@@ -84,20 +86,6 @@ def deletePedidos():
         st.sidebar.success(f'Pedido ID {pedido_id} excluído com sucesso!')
 
 
-
-
-from deta import Deta
-import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-
-DETA_KEY = "e0u31gqkqju_2Ps7fJD5a1kAKF2Rr4Y31ASSdvUUeX8Y"
-
-# Initialize Deta
-deta = Deta(DETA_KEY)
-
-lucro_db = deta.Base("lucro")
 
 # Interface para consulta de lucros
 class LucroConsultaInterface:

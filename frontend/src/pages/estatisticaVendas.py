@@ -3,12 +3,14 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
 DETA_KEY = "e0zg3sgc85x_rLjU5Zy93MAHEY8UaoCnMGDJSNZiiHNR"
 
 # Initialize Deta
 deta = Deta(DETA_KEY)
 
-lucro_db = deta.Base("lucro")
+lucro_db = deta.Base("analiseLucro")
+
 
 def main():
     # Consultar dados do banco Deta

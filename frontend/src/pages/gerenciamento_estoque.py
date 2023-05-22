@@ -4,12 +4,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 from deta import Deta
 
+
 DETA_KEY = "e0zg3sgc85x_rLjU5Zy93MAHEY8UaoCnMGDJSNZiiHNR"
 
 # Initialize Deta
 deta = Deta(DETA_KEY)
 
-lucro_db = deta.Base("lucro")
+lucro_db = deta.Base("analiseLucro")
 
 
 def gerenciamento_estoque():
