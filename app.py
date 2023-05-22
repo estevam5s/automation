@@ -21,6 +21,12 @@ from frontend.src.pages.marmitaMaisVendidas import __main__Marmitas__
 from frontend.src.pages.CRUD.consult.lucroEstabelecimento import CsvLucroQuery, LucroConsultaStreamlit, LucroService
 
 
+def autenticar_usuario(senha):
+    # Lógica de autenticação aqui
+    # Se a autenticação for bem-sucedida, redireciona para a página principal
+    st.experimental_set_query_params()
+    st.experimental_rerun()
+
 def authenticate():
     # Define a password for authentication
     password = "user"
@@ -31,15 +37,19 @@ def authenticate():
         st.title("Authentication")
         password_input = st.text_input("Enter password", type="password")
         login_button = st.button("Log In")
-
-        # Check if the login button is clicked and the entered password matches the defined password
         if login_button and password_input == password:
             st.session_state.authenticated = True
             with st.spinner("Carregando..."):
                 st.success("Login efetuado com sucesso!")
                 st.balloons()
+
+            # Rerun the script to replace the login page with the main page
+            st.experimental_rerun()
+
+        elif login_button and password_input != password:
             st.error("Nome de usuário ou senha incorretos.")
             st.info("Se você esqueceu sua senha, entre em contato com o administrador.")
+
             st.markdown("""
             <style>
                 .container {
@@ -161,119 +171,124 @@ def authenticate():
             """
 
             st.markdown(contact_form + javascript_code, unsafe_allow_html=True)
+
+
+def logout():
+    # Clear the authenticated session state
+    st.session_state.pop('authenticated', None)
+    # Rerun the script to replace the main page with the login page
+    st.experimental_rerun()
         
 
-# Authenticate the user
-authenticate()
-
 def main() -> any:
-    # Authenticate the user
-    if 'authenticated' in st.session_state and st.session_state.authenticated:
-        top_image = Image.open('frontend/src/pages/public/images/banner_top.png')
-        bottom_image = Image.open('frontend/src/pages/public/images/banner_bottom.png')
-        main_image = Image.open('frontend/src/pages/public/images/main_banner.png')
-        st.image(main_image,use_column_width='auto')
-
-        # Adiciona um sidebar
-        st.sidebar.title("Opções de Consulta")
-        selecionar = st.sidebar.selectbox("Selecione a página", [
-                        "🏠 Home",
-                        "Consultar Dados",
-                        "Gráfico",
-                        "Estatísticas de vendas",
-                        "Consulta de lucros",
-                        "Relatórios financeiros",
-                        "Análise de tendências",
-                        "Histórico de vendas",
-                        "Gerenciamento de estoque",
-
-
-                        "Tipo de marmita mais vendido",
-                        "Tipo de marmita menos vendido".capitalize(),
-                        "Tipo de marmita mais lucrativo",
-                        "Tipo de marmita menos lucrativo",
-                        "Tipo de marita que saiu",
-                        "Pedidos por Semana",
-                        "Análise de Rentabilidade",
-                        "Calcular Lucro",
-                        "Consultar Lucro",
-                        "Developers",
-                        "About",
-                        "Suporte ao cliente",
-                        "Documentação",
-                        "Ajuda e suporte",
-                        "Sair"
-                        ]
-                    )
-        # Add restaurant information to the sidebar
-        st.sidebar.title("Informações do Restaurante")
-        st.sidebar.markdown("Este é um restaurante que oferece comida em marmitex.")
-        st.sidebar.markdown("Faça uma análise de rentabilidade com base nos dados fornecidos.")
-
-        # Executa a função correspondente com base na opção selecionada
-        if selecionar == "🏠 Home":
-            homePage()
-        if selecionar == "Consultar Dados":
-            show_data_table()
-        if selecionar == "Gráfico":
-            csv_file = 'app/data/pedidos.csv'  # Caminho relativo para o arquivo .csv
-            # Exemplo de uso
-            chart_type = st.selectbox('Escolha o tipo de gráfico', ['bolha', 'barra', 'linha', 'pizza', 'histograma', 'dispersao', 'matriz', 'funil', 'radar', 'area', 'torta', 'dendrograma', 'correlacao', 'waffle', 'calendario', 'radial'])
-            generate_chart(csv_file, chart_type)
-
-
-        if selecionar == "Pedidos por Semana":
-            csv_file = 'app/data/pedidos.csv'
-            # Perform analysis on the weekly orders
-            analise_pedidos_semana(csv_file)
-        if selecionar == "Tipo de marmita mais vendido":
-            csv_file = 'app/data/pedidos.csv'
-            __main__Marmitas__(csv_file)
-        if selecionar == "Tipo de marita que saiu":
-            csv_file = 'app/data/pedidos.csv'
-            st.title("Análise de Marmitas")
-
-            # Selecionar arquivo CSV
-            # csv_file = st.file_uploader("Carregar arquivo CSV", type=['csv'])
-
-            if csv_file is not None:
-                # Chamar função para listar tipos de marmita e gerar gráfico
-                listar_tipos_marmita(csv_file)
-        if selecionar == "Developers":
-            developers()
-        if selecionar == "Sair":
-            logout_button = st.button("Log Out")
-            if logout_button:
-                st.session_state.authenticated = False
-        if selecionar == "Análise de Rentabilidade":
-            csv_file = 'app/data/pedidos.csv'
-            # Check if a file is uploaded
-            if csv_file is not None:
-                # Perform analysis and display the results
-                analise(csv_file)
-        if selecionar == "Calcular Lucro":
-            csv_file = 'app/data/pedidos.csv'
-            # Check if a file is uploaded
-            if csv_file is not None:
-                # Perform analysis and display the results
-                calcular_lucro(csv_file, 'app/data/lucro.csv')
-        if selecionar == "Consultar Lucro":
-            st.title('Consulta de Lucros')
-            csv_file = 'app/data/lucro.csv'
-            # Check if a file is uploaded
-            # Dependências
-            lucro_query = CsvLucroQuery(csv_file)
-            lucro_service = LucroService(lucro_query)
-            lucro_interface = LucroConsultaStreamlit()
-            lucros = lucro_service.obter_lucros()
-            lucro_interface.exibir_lucros(lucros)
-
-        st.sidebar.image(top_image,use_column_width='auto')
-        st.sidebar.image(bottom_image,use_column_width='auto')
-
+    # Check if the user is authenticated
+    if 'authenticated' not in st.session_state:
+        # Authenticate the user
+        authenticate()
     else:
-        # Display login message if the user is not authenticated
-        st.info("Please log in to access the system.")
+        # Authenticate the user
+        if 'authenticated' in st.session_state and st.session_state.authenticated:
+            top_image = Image.open('frontend/src/pages/public/images/banner_top.png')
+            bottom_image = Image.open('frontend/src/pages/public/images/banner_bottom.png')
+            main_image = Image.open('frontend/src/pages/public/images/main_banner.png')
+            st.image(main_image,use_column_width='auto')
+
+            # Adiciona um sidebar
+            st.sidebar.title("Opções de Consulta")
+            selecionar = st.sidebar.selectbox("Selecione a página", [
+                            "🏠 Home",
+                            "Consultar Dados",
+                            "Gráfico",
+                            "Estatísticas de vendas",
+                            "Consulta de lucros",
+                            "Relatórios financeiros",
+                            "Análise de tendências",
+                            "Histórico de vendas",
+                            "Gerenciamento de estoque",
+                            "Tipo de marmita mais vendido",
+                            "Tipo de marmita menos vendido".capitalize(),
+                            "Tipo de marmita mais lucrativo",
+                            "Tipo de marmita menos lucrativo",
+                            "Tipo de marita que saiu",
+                            "Pedidos por Semana",
+                            "Análise de Rentabilidade",
+                            "Calcular Lucro",
+                            "Consultar Lucro",
+                            "Developers",
+                            "About",
+                            "Suporte ao cliente",
+                            "Documentação",
+                            "Ajuda e suporte",
+                            "Sair"
+                            ]
+                        )
+            # Add restaurant information to the sidebar
+            st.sidebar.title("Informações do Restaurante")
+            st.sidebar.markdown("Este é um restaurante que oferece comida em marmitex.")
+            st.sidebar.markdown("Faça uma análise de rentabilidade com base nos dados fornecidos.")
+
+            # Executa a função correspondente com base na opção selecionada
+            if selecionar == "🏠 Home":
+                homePage()
+            if selecionar == "Consultar Dados":
+                show_data_table()
+            if selecionar == "Gráfico":
+                csv_file = 'app/data/pedidos.csv'  # Caminho relativo para o arquivo .csv
+                # Exemplo de uso
+                chart_type = st.selectbox('Escolha o tipo de gráfico', ['bolha', 'barra', 'linha', 'pizza', 'histograma', 'dispersao', 'matriz', 'funil', 'radar', 'area', 'torta', 'dendrograma', 'correlacao', 'waffle', 'calendario', 'radial'])
+                generate_chart(csv_file, chart_type)
+
+
+            if selecionar == "Pedidos por Semana":
+                csv_file = 'app/data/pedidos.csv'
+                # Perform analysis on the weekly orders
+                analise_pedidos_semana(csv_file)
+            if selecionar == "Tipo de marmita mais vendido":
+                csv_file = 'app/data/pedidos.csv'
+                __main__Marmitas__(csv_file)
+            if selecionar == "Tipo de marita que saiu":
+                csv_file = 'app/data/pedidos.csv'
+                st.title("Análise de Marmitas")
+
+                # Selecionar arquivo CSV
+                # csv_file = st.file_uploader("Carregar arquivo CSV", type=['csv'])
+
+                if csv_file is not None:
+                    # Chamar função para listar tipos de marmita e gerar gráfico
+                    listar_tipos_marmita(csv_file)
+            if selecionar == "Developers":
+                developers()
+            if selecionar == "Sair":
+                logout()
+            if selecionar == "Análise de Rentabilidade":
+                csv_file = 'app/data/pedidos.csv'
+                # Check if a file is uploaded
+                if csv_file is not None:
+                    # Perform analysis and display the results
+                    analise(csv_file)
+            if selecionar == "Calcular Lucro":
+                csv_file = 'app/data/pedidos.csv'
+                # Check if a file is uploaded
+                if csv_file is not None:
+                    # Perform analysis and display the results
+                    calcular_lucro(csv_file, 'app/data/lucro.csv')
+            if selecionar == "Consultar Lucro":
+                st.title('Consulta de Lucros')
+                csv_file = 'app/data/lucro.csv'
+                # Check if a file is uploaded
+                # Dependências
+                lucro_query = CsvLucroQuery(csv_file)
+                lucro_service = LucroService(lucro_query)
+                lucro_interface = LucroConsultaStreamlit()
+                lucros = lucro_service.obter_lucros()
+                lucro_interface.exibir_lucros(lucros)
+
+            st.sidebar.image(top_image,use_column_width='auto')
+            st.sidebar.image(bottom_image,use_column_width='auto')
+
+        else:
+            # Display login message if the user is not authenticated
+            st.info("Please log in to access the system.")
 
 
 if __name__ == "__main__":
