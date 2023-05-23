@@ -12,6 +12,7 @@ import pandas as pd
 from PIL import Image
 from deta import Deta
 import streamlit as st
+from frontend.src.pages.help import help__
 from frontend.src.pages.home import homePage
 from frontend.src.pages.about import about__
 from frontend.src.pages.documentacao import doc__
@@ -113,6 +114,9 @@ def main() -> any:
 
             if selecionar == "💾 Documentação":
                 doc__()
+
+            if selecionar == "🪖 Ajuda e suporte":
+                help__()
 
             if selecionar == "⚠️ About":
                 about__()
