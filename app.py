@@ -12,6 +12,8 @@ import pandas as pd
 from PIL import Image
 from deta import Deta
 import streamlit as st
+from frontend.src.pages.about import about__
+from frontend.src.pages.documentacao import doc__
 from frontend.src.pages.home import homePage
 from frontend.src.pages.login import authenticate
 from frontend.src.pages.developer import developers
@@ -108,6 +110,12 @@ def main() -> any:
 
             if selecionar == "🧑🏻‍🦱 Suporte ao cliente":
                 suporteCliente()
+
+            if selecionar == "💾 Documentação":
+                doc__()
+
+            if selecionar == "⚠️ About":
+                about__()
 
             if selecionar == "insert":
                 # Inserir senha no banco de dados

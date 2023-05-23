@@ -26,6 +26,7 @@ googlenews==1.5.8
 ta==0.7.0
 plotly==4.14.3
 nltk==3.8.1
+weasyprint>=52.5
 requests
 convertdate
 beautifulsoup4
