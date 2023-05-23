@@ -1,6 +1,17 @@
 import streamlit as st
+from streamlit_extras.buy_me_a_coffee import button
+from streamlit_extras.mention import mention
+from streamlit_extras.let_it_rain import rain
 
 def homePage():
+
+    rain(
+        emoji="🎈",
+        font_size=54,
+        falling_speed=5,
+        animation_length="infinite",
+    )
+
     st.title("Bem-vindo ao Meu Web App")
     st.write("Esta é a página inicial do nosso web app. Aqui você encontrará informações e recursos para ajudá-lo a navegar pelo aplicativo.")
     
@@ -27,6 +38,22 @@ def homePage():
     
     st.subheader("3. Entre em contato")
     st.write("Se tiver alguma dúvida ou precisar de suporte, entre em contato conosco através do formulário de contato ou pelos nossos canais de suporte.")
+
+    st.subheader("4. Projeto Nosso")
+    st.write("Este projeto foi desenvolvido por Eduaro, estudante de sistema de Informação na Estácio.")
+
+    mention(
+        label="An awesome Streamlit App",
+        icon="streamlit",  # Some icons are available... like Streamlit!
+        url="https://extras.streamlitapp.com",
+    )
+
+    mention(
+        label="example-app-cv-model",
+        icon="github",  # GitHub is also featured!
+        url="https://github.com/streamlit/example-app-cv-model",
+    )
+
 
     st.markdown("""
     <style>
@@ -149,6 +176,8 @@ def homePage():
     """
 
     st.markdown(contact_form + javascript_code, unsafe_allow_html=True)
+    
+    button(username="fake-username", floating=False, width=221, text= "Buy me a coffee",bg_color= "#FFDD00")
 
 if __name__ == "__main__":
     homePage()

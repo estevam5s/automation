@@ -267,5 +267,3 @@ def generate_chart(db, chart_type):
         
     else:
         st.error("Tipo de gráfico não suportado.")
-
-                         

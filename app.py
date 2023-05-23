@@ -64,6 +64,7 @@ def main() -> any:
     else:
         # Authenticate the user
         if 'authenticated' in st.session_state and st.session_state.authenticated:
+            
             top_image = Image.open('frontend/src/pages/public/images/banner_top.png')
             bottom_image = Image.open('frontend/src/pages/public/images/banner_bottom.png')
             main_image = Image.open('frontend/src/pages/public/images/main_banner.png')
