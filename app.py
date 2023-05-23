@@ -12,11 +12,12 @@ import pandas as pd
 from PIL import Image
 from deta import Deta
 import streamlit as st
+from frontend.src.pages.home import homePage
 from frontend.src.pages.about import about__
 from frontend.src.pages.documentacao import doc__
-from frontend.src.pages.home import homePage
 from frontend.src.pages.login import authenticate
 from frontend.src.pages.developer import developers
+from frontend.src.pages.suporte import suporteCliente
 from frontend.src.pages.CRUD.delete.deletar import __delete__
 from frontend.src.pages.gerenciamento_estoque import show_data
 from frontend.src.pages.marmitas import show_data_table_marmita
@@ -30,7 +31,6 @@ from frontend.src.pages.historico_vendas import gerar_historico_vendas
 from frontend.src.pages.estatisticaVendas import calcular_estatisticas_vendas
 from frontend.src.pages.relatorioFinanceiro import gerar_relatorios_financeiros
 from frontend.src.pages.CRUD.insert.inserir import __insert__, insert_data_lucro, insert_data_pedidos
-from frontend.src.pages.suporte import suporteCliente
 
 
 # Load environment variables
