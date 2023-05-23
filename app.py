@@ -28,6 +28,7 @@ from frontend.src.pages.historico_vendas import gerar_historico_vendas
 from frontend.src.pages.estatisticaVendas import calcular_estatisticas_vendas
 from frontend.src.pages.relatorioFinanceiro import gerar_relatorios_financeiros
 from frontend.src.pages.CRUD.insert.inserir import __insert__, insert_data_lucro, insert_data_pedidos
+from frontend.src.pages.suporte import suporteCliente
 
 
 # Load environment variables
@@ -104,6 +105,9 @@ def main() -> any:
             # Executa a função correspondente com base na opção selecionada
             if selecionar == "🏠 Home":
                 homePage()
+
+            if selecionar == "🧑🏻‍🦱 Suporte ao cliente":
+                suporteCliente()
 
             if selecionar == "insert":
                 # Inserir senha no banco de dados
