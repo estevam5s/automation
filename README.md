@@ -36,11 +36,26 @@ Streamlit doesn't support running under HTTPS, but you might want to do that. On
 
 - Python 3.6.X
 - Pandas
-- numpy
-- plotly
-- streamlit
-- docker
+- Numpy
+- Plotly
+- Matplotlib
+- Streamlit
+- Docker
+- Docker Compose
 - openpyxl
+- Deta
+
+> ***```Deta```***: Utilizado como uma solução de banco de dados e armazenamento na nuvem, fornecendo recursos de persistência de dados para o seu web app.
+
+>  ***```Matplotlib```***: Uma biblioteca de visualização de dados em Python, utilizada para criar gráficos e visualizações.
+
+> ***```Numpy```***: Uma biblioteca Python utilizada para trabalhar com arrays. É uma biblioteca Python central para a computação científica.
+
+> ***```Pandas```***: Uma biblioteca Python utilizada para trabalhar com dados. Ela tem funções que tornam o trabalho com dados mais fácil.
+
+> ***```Plotly```***: Uma biblioteca Python utilizada para criar visualizações interativas.
+
+> ***```Streamlit```***: Uma biblioteca de criação de aplicativos da web para visualização interativa de dados, que permite criar interfaces de usuário interativas para explorar e apresentar dados.
 
 
 ## Model Deployment

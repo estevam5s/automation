@@ -1,8 +1,9 @@
 import pandas as pd
 from deta import Deta
 import streamlit as st
+import numpy as np
 import plotly.express as px
-
+import plotly.figure_factory as ff
 
 # Load environment variables
 DETA_KEY = "e0zg3sgc85x_rLjU5Zy93MAHEY8UaoCnMGDJSNZiiHNR"
@@ -32,17 +33,83 @@ def generate_chart(db, chart_type):
 
     if chart_type == 'bolha':
         # Gerar um gráfico de bolha usando o Plotly Express
-        fig = px.scatter(orders, x='DATA', y='QUANTIDADE', size='QUANTIDADE', color='QUANTIDADE',
-                         hover_name='DATA', color_continuous_scale='Viridis')
+        fig = px.scatter(
+            orders,
+            x='DATA',
+            y='QUANTIDADE',
+            size='QUANTIDADE',
+            color='QUANTIDADE',
+            hover_name='DATA',
+            log_x=True,
+            size_max=60
+        )
 
         # Personalizar o layout do gráfico
-        fig.update_layout(title='Pedidos por Data (Gráfico de Bolha)',
-                          xaxis_title='Data',
-                          yaxis_title='Quantidade de Pedidos',
+        fig.update_layout(
+            title='Pedidos por Data (Gráfico de Bolha)',
+            xaxis_title='Data',
+            yaxis_title='Quantidade de Pedidos',
+            showlegend=False
+        )
+
+        # Exibir o gráfico no Streamlit
+        st.plotly_chart(fig, use_container_width=True)
+
+    elif chart_type == 'bolha_modificado':
+        # Consultar todos os registros no banco de dados
+        registros = db.fetch().items
+
+        # Criar um DataFrame com os dados
+        data = {
+            "ID": [registro["ID"] for registro in registros],
+            "DATA": [registro["DATA"] for registro in registros],
+            "ITEM": [registro["ITEM"] for registro in registros]
+        }
+        df = pd.DataFrame(data)
+
+        # Definir um tamanho fixo para os pontos
+        size = 10
+
+        fig = px.scatter(
+            df,
+            x="DATA",
+            y="ITEM",
+            size=[size] * len(df),  # Usar o tamanho fixo para todos os pontos
+            color="ID",
+            hover_name="ID",
+            log_x=True,
+            size_max=60,
+        )
+
+        tab1, tab2 = st.tabs(["Streamlit theme (default)", "Plotly native theme"])
+        with tab1:
+            # Use the Streamlit theme.
+            # This is the default. So you can also omit the theme argument.
+            st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+        with tab2:
+            # Use the native Plotly theme.
+            st.plotly_chart(fig, theme=None, use_container_width=True)
+
+
+    elif chart_type == 'dist':
+        # Gerar um gráfico de distribuição usando o Plotly Figure Factory
+        x = np.random.randn(200)
+
+        # Create distplot
+        fig = ff.create_distplot([x], ['Group 1'], show_hist=False)
+
+        # Personalizar o layout do gráfico
+        fig.update_layout(title='Distribuição de Dados',
+                          xaxis_title='Valores',
+                          yaxis_title='Densidade',
                           showlegend=False)
 
         # Exibir o gráfico no Streamlit
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, use_container_width=True)
+
+    elif chart_type == 'area':
+        # Gerar um gráfico de área usando o Streamlit
+        st.area_chart(orders.set_index('DATA'))
         
     elif chart_type == 'pizza':
         # Gerar um gráfico de pizza usando o Plotly Express
@@ -76,17 +143,7 @@ def generate_chart(db, chart_type):
 
         # Exibir o gráfico no Streamlit
         st.plotly_chart(fig)
-    elif chart_type == 'area':
-        # Gerar um gráfico de área usando o Plotly Express
-        fig = px.area(orders, x='DATA', y='QUANTIDADE')
-
-        # Personalizar o layout do gráfico
-        fig.update_layout(title='Pedidos por Data (Gráfico de Área)',
-                          xaxis_title='Data',
-                          yaxis_title='Quantidade de Pedidos')
-
-        # Exibir o gráfico no Streamlit
-        st.plotly_chart(fig)
+    
     elif chart_type == 'scatter':
         # Gerar um gráfico de dispersão usando o Plotly Express
         fig = px.scatter(orders, x='DATA', y='QUANTIDADE', trendline='lowess')

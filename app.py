@@ -32,6 +32,7 @@ from frontend.src.pages.historico_vendas import gerar_historico_vendas
 from frontend.src.pages.estatisticaVendas import calcular_estatisticas_vendas
 from frontend.src.pages.relatorioFinanceiro import gerar_relatorios_financeiros
 from frontend.src.pages.CRUD.insert.inserir import __insert__, insert_data_lucro, insert_data_pedidos
+from frontend.src.pages.traducao import translate_page
 
 
 # Load environment variables
@@ -118,6 +119,9 @@ def main() -> any:
             if selecionar == "🪖 Ajuda e suporte":
                 help__()
 
+            if selecionar == "Traduzir":
+                translate_page()
+
             if selecionar == "⚠️ About":
                 about__()
 
@@ -167,7 +171,7 @@ def main() -> any:
                 st.markdown("Bem-vindo à nossa ferramenta de análise de dados de pedidos!")
                 st.markdown("Aqui você pode explorar e obter insights valiosos sobre os dados de pedidos da sua empresa.")
 
-                chart_type = st.selectbox('Escolha o tipo de gráfico', ['bolha', 'barra', 'linha', 'pizza', 'histograma', 'dispersao', 'matriz', 'funil', 'radar', 'area', 'torta', 'dendrograma', 'correlacao', 'waffle', 'calendario', 'radial'])
+                chart_type = st.selectbox('Escolha o tipo de gráfico', ['bolha', 'bolha_modificado', 'dist', 'barra', 'linha', 'pizza', 'histograma', 'dispersao', 'matriz', 'funil', 'radar', 'area', 'torta', 'dendrograma', 'correlacao', 'waffle', 'calendario', 'radial'])
                 generate_chart(pedidos_db, chart_type)
 
             if selecionar == "📈 Gerenciamento de estoque":
