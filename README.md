@@ -89,8 +89,8 @@ streamlit run streamlit_basics.py
 
 Clone this repository :
 
-	git clone https://github.com/
-	cd bond-valuation-python
+	git clone https://github.com/estevam5s/big-data-drisssen
+	cd big-data-drisssen
 	
 You may want to use a virtual environment to keep a clean Python installation :
 
