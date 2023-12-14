@@ -1,3 +1,97 @@
+
+import os
+import re
+import shutil
+import sqlite3
+from pathlib import Path
+
+def modificar_name_pasta(name):
+    """
+    Remove padrões específicos do nome do arquivo.
+    """
+    padroes_a_remover = [
+        r'^mtd0[3]_', r'^mtd0[4]_', r'^\d+_',
+        # Adicione outros padrões conforme necessário
+    ]
+
+    for padrao in padroes_a_remover:
+        name = re.sub(padrao, '', name)
+    return name
+
+def normalizar_caminho(caminho):
+    """
+    Substitui barras invertidas por barras normais nos caminhos.
+    """
+    return str(caminho).replace("\\", "/")
+
+def percorrer_diretorio(caminho, conexao_banco):
+    """
+    Percorre o diretório e insere dados na tabela Rota.
+    """
+    if os.path.exists(caminho):
+        for root, dirs, files in os.walk(caminho):
+            for arquivo_ou_diretorio in files:
+                caminho_completo = Path(root) / arquivo_ou_diretorio
+                extensao = caminho_completo.suffix.lower()
+
+                if extensao in [".shp", ".cpg", ".dbf", ".prj", ".sbn", ".sbx", ".shx"]:
+                    print(f"Arquivo: {caminho_completo}")
+
+                    name = caminho_completo.stem
+                    pasta = modificar_name_pasta(name)
+                    destino = Path(".", pasta, caminho_completo.name)
+
+                    destino.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy(caminho_completo, destino)
+
+                    origem = normalizar_caminho(caminho_completo)
+                    destino = normalizar_caminho(destino)
+
+                    # Adicionar expressão regular para remover parte específica da origem
+                    origem_sem_parte_especifica = re.sub(r'^//nas\.ibge\.gov\.br/DGC-ACERVO-CCAR2/CONVERSAO_DIGITAL/CCAR_PRODUTOS_VETOR/Arquivos_Shape/CCAR_PRODUTOS_VETOR/', '', origem)
+
+                    inserir_dados_rota(conexao_banco, name, origem_sem_parte_especifica, destino)
+
+def criar_tabela_rota(conexao):
+    cursor = conexao.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS Rota (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            origem TEXT,
+            destino TEXT
+        )
+    ''')
+    conexao.commit()
+
+def inserir_dados_rota(conexao, name, origem, destino):
+    cursor = conexao.cursor()
+    cursor.execute('''
+        INSERT INTO Rota (name, origem, destino) VALUES (?, ?, ?)
+    ''', (name, origem, destino))
+    conexao.commit()
+
+# Substituir o caminho do banco de dados conforme necessário
+caminho_banco = 'dbSql.sqlite'
+
+# Substituir "C:\caminho\para\arquivos" pelo caminho real dos arquivos shapefile
+caminho = r'\\nas.ibge.gov.br\DGC-ACERVO-CCAR2\CONVERSAO_DIGITAL\CCAR_PRODUTOS_VETOR\Arquivos_Shape\CCAR_PRODUTOS_VETOR'
+
+# Conectar ao banco de dados
+conexao_banco = sqlite3.connect(caminho_banco)
+
+# Criar a tabela Rota se ainda não existir
+criar_tabela_rota(conexao_banco)
+
+# Percorrer o diretório e inserir os dados na tabela Rota
+percorrer_diretorio(caminho, conexao_banco)
+
+# Fechar a conexão com o banco de dados
+conexao_banco.close()
+
+
+
+
 <h1 align="center">
              • ⭐ Marmitex
 </h1>
