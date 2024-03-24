@@ -22,7 +22,7 @@ wordcloud==1.8.1
 regex>=2021.8.3
 streamlit==1.22.0
 matplotlib==3.3.4
-googlenews==1.5.8
+googlenews==1.6.14
 ta==0.7.0
 plotly==4.14.3
 nltk==3.8.1
