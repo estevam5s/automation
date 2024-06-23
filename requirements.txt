@@ -20,7 +20,7 @@ tweepy==3.10.0
 textblob==0.15.3
 wordcloud==1.8.1
 regex>=2021.8.3
-streamlit==1.22.0
+streamlit==1.36.0
 matplotlib==3.3.4
 googlenews==1.5.8
 ta==0.7.0
